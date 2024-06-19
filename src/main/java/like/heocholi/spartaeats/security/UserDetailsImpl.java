@@ -1,7 +1,7 @@
 package like.heocholi.spartaeats.security;
 
 import like.heocholi.spartaeats.constants.UserRole;
-import like.heocholi.spartaeats.entity.User;
+import like.heocholi.spartaeats.entity.Customer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,11 +15,11 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-    private final User user;
+    private final Customer customer;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        UserRole userRole = user.getRole();
+        UserRole userRole = customer.getRole();
         String authority = userRole.toString();
 
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
@@ -31,12 +31,12 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return customer.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUserId();
+        return customer.getUserId();
     }
 
     @Override

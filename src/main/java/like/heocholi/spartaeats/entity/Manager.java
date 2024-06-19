@@ -17,20 +17,16 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name = "users")
+@Table(name = "managers")
 @NoArgsConstructor
-public class User extends Timestamped{
+public class Manager extends Timestamped{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	private String userId;
 	
-	private String name;
-	
 	private String password;
-	
-	private String address;
 	
 	private String refreshToken;
 
@@ -43,23 +39,10 @@ public class User extends Timestamped{
 	@OneToOne(mappedBy = "manager", fetch = FetchType.LAZY)
 	private Store store;
 
-	public User(SignupRequestDto requestDto, String encodedPassword) {
+	public Manager(SignupRequestDto requestDto, String encodedPassword) {
 		this.userId = requestDto.getUserId();
 		this.password = encodedPassword;
-		this.name = requestDto.getName();
-		this.address = requestDto.getAddress();
 		this.userStatus = UserStatus.ACTIVE;
 		this.role = UserRole.ROLE_CUSTOMER;
-	}
-
-	public void saveRefreshToken(String refreshToken){
-		this.refreshToken = refreshToken;
-	}
-
-	public boolean validateRefreshToken(String refreshToken){
-		if(this.refreshToken != null && this.refreshToken.equals(refreshToken)){
-			return true;
-		}
-		return false;
 	}
 }

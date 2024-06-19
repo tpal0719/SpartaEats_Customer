@@ -3,7 +3,7 @@ package like.heocholi.spartaeats.config;
 import like.heocholi.spartaeats.jwt.JwtAuthenticationFilter;
 import like.heocholi.spartaeats.jwt.JwtAuthorizationFilter;
 import like.heocholi.spartaeats.jwt.JwtUtil;
-import like.heocholi.spartaeats.repository.UserRepository;
+import like.heocholi.spartaeats.repository.CustomerRepository;
 import like.heocholi.spartaeats.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -29,7 +29,7 @@ public class SecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-    private final UserRepository userRepository;
+    private final CustomerRepository customerRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -43,7 +43,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, userRepository);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, customerRepository);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
@@ -65,8 +65,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests((authorizeHttpRequests) ->
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers("/users/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/customers").permitAll()
+                        .requestMatchers("/customers/login").permitAll()
                         .anyRequest().authenticated()
         );
 

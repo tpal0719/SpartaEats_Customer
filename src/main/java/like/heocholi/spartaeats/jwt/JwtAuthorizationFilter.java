@@ -6,7 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import like.heocholi.spartaeats.constants.UserRole;
-import like.heocholi.spartaeats.entity.User;
+import like.heocholi.spartaeats.entity.Customer;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -65,10 +64,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         if(StringUtils.hasText(refreshToken) && jwtUtil.validateToken(refreshToken)){
             Claims info = jwtUtil.getUserInfoFromToken(refreshToken);
             UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(info.getSubject());
-            User user = userDetails.getUser();
+            Customer customer = userDetails.getCustomer();
 
-            if(user.validateRefreshToken(refreshToken)){
-                UserRole role = user.getRole();
+            if(customer.validateRefreshToken(refreshToken)){
+                UserRole role = customer.getRole();
                 String newAccessToken = jwtUtil.createAccessToken(info.getSubject(), role);
                 jwtUtil.setHeaderAccessToken(response, newAccessToken);
 
