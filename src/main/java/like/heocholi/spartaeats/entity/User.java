@@ -35,4 +35,15 @@ public class User extends Timestamped{
 	
 	@OneToOne(mappedBy = "manager", fetch = FetchType.LAZY)
 	private Store store;
+
+	public void saveRefreshToken(String refreshToken){
+		this.refreshToken = refreshToken;
+	}
+
+	public boolean validateRefreshToken(String refreshToken){
+		if(this.refreshToken != null && this.refreshToken.equals(refreshToken)){
+			return true;
+		}
+		return false;
+	}
 }
