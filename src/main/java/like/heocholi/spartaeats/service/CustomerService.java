@@ -2,19 +2,22 @@ package like.heocholi.spartaeats.service;
 
 import like.heocholi.spartaeats.dto.SignupRequestDto;
 import like.heocholi.spartaeats.entity.Customer;
+import like.heocholi.spartaeats.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CustomerRepository {
-
-    private final like.heocholi.spartaeats.repository.CustomerRepository customerRepository;
+public class CustomerService {
+    private final CustomerRepository customerRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public String signup(SignupRequestDto requestDto) {
         String userId = requestDto.getUserId();
         String password = requestDto.getPassword();
