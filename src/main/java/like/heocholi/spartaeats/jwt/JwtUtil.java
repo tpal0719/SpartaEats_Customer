@@ -16,9 +16,7 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 
-
 @Component
-@RequiredArgsConstructor
 @Slf4j(topic = "JwtUtil")
 public class JwtUtil {
     // accessToken 토큰 헤더
@@ -34,7 +32,7 @@ public class JwtUtil {
     // refreshToken 만료 시간 (2주)
     private final long REFRESH_TOKEN_EXPIRE_TIME = 14 * 24 * 60 * 60 * 1000L;
 
-    @Value("jwt.secret.key")
+    @Value("${jwt.secret.key}")
     private String secretKey;
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
