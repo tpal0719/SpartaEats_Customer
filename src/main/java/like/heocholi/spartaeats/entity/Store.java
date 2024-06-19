@@ -11,9 +11,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import like.heocholi.spartaeats.constants.RestaurantType;
 
 @Entity
+@Table(name = "stores")
 public class Store extends Timestamped{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

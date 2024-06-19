@@ -12,9 +12,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import like.heocholi.spartaeats.constants.OrderState;
 
 @Entity
+@Table(name = "orders")
 public class Order extends Timestamped{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
