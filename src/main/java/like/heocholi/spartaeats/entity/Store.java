@@ -24,7 +24,7 @@ public class Store extends Timestamped{
 	private String name;
 	
 	@OneToOne(fetch = FetchType.LAZY)
-	private User manager;
+	private Manager manager;
 	
 	private String address;
 	
