@@ -2,23 +2,12 @@ package like.heocholi.spartaeats.entity;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import like.heocholi.spartaeats.constants.RestaurantType;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Getter
-@NoArgsConstructor
+@Entity
 @Table(name = "stores")
 public class Store extends Timestamped{
 	@Id
@@ -27,7 +16,8 @@ public class Store extends Timestamped{
 	
 	private String name;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "manager_id")
 	private Manager manager;
 	
 	private String address;
@@ -35,6 +25,6 @@ public class Store extends Timestamped{
 	@Enumerated(EnumType.STRING)
 	private RestaurantType type;
 	
-	@OneToMany(mappedBy = "store", orphanRemoval = true)
+	@OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
 	List<Menu> menuList;
 }
