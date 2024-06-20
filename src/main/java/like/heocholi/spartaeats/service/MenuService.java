@@ -1,5 +1,6 @@
 package like.heocholi.spartaeats.service;
 
+import like.heocholi.spartaeats.dto.MenuResponseDto;
 import like.heocholi.spartaeats.dto.ResponseMessage;
 import like.heocholi.spartaeats.entity.Menu;
 import like.heocholi.spartaeats.entity.Store;
@@ -22,18 +23,17 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
-    public Menu getMenu(Long storeId, Long menuId) {
+    public MenuResponseDto getMenu(Long storeId, Long menuId) {
         findStoreById(storeId);
         Menu menu = menuRepository.findByStoreIdAndId(storeId,menuId).orElseThrow(() -> new IllegalArgumentException("음식점에 해당 메뉴가 존재하지 않습니다."));
 
-        return menu;
+        return new MenuResponseDto(menu);
     }
 
-    public List<Menu> getMenus(Long storeId) {
-        findStoreById(storeId);
-        List<Menu> menus = menuRepository.findAllByStoreId(storeId).orElseThrow(() -> new IllegalArgumentException("음식점에 메뉴가 존재하지 않습니다."));
+    public List<MenuResponseDto> getMenus(Long storeId) {
+        Store store = findStoreById(storeId);
 
-        return menus;
+       return menuRepository.findAllByStoreId(storeId).stream().map(MenuResponseDto::new).toList();
     }
 
 
