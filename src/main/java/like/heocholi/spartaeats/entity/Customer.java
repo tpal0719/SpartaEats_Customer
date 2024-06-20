@@ -1,6 +1,13 @@
 package like.heocholi.spartaeats.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import like.heocholi.spartaeats.constants.UserRole;
 import like.heocholi.spartaeats.constants.UserStatus;
 import like.heocholi.spartaeats.dto.ProfileRequestDTO;
@@ -65,5 +72,13 @@ public class Customer extends Timestamped {
 	// 비밀번호 업데이트 메서드
 	public void updatePassword(String newPassword) {
 		this.password = newPassword;
+	}
+
+	public void withdrawCustomer() {
+		this.userStatus = UserStatus.DEACTIVATE;
+	}
+
+	public void removeRefreshToken() {
+		this.refreshToken = "";
 	}
 }

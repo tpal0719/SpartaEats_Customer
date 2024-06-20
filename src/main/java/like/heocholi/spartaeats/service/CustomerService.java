@@ -3,6 +3,13 @@ package like.heocholi.spartaeats.service;
 import like.heocholi.spartaeats.dto.*;
 import like.heocholi.spartaeats.entity.Customer;
 import like.heocholi.spartaeats.entity.PasswordHistory;
+import like.heocholi.spartaeats.constants.ErrorType;
+import like.heocholi.spartaeats.constants.UserStatus;
+import like.heocholi.spartaeats.dto.SignupRequestDto;
+import like.heocholi.spartaeats.dto.SignupResponseDto;
+import like.heocholi.spartaeats.dto.WithdrawRequestDto;
+import like.heocholi.spartaeats.entity.Customer;
+import like.heocholi.spartaeats.exception.UserException;
 import like.heocholi.spartaeats.repository.CustomerRepository;
 import like.heocholi.spartaeats.repository.PasswordHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +32,13 @@ public class CustomerService {
     // requestDto 회원가입 요청 DTO (SignupRequestDto)
     // String 회원가입 성공 메시지
     @Transactional
-    public String signup(SignupRequestDto requestDto) {
+    public SignupResponseDto signup(SignupRequestDto requestDto) {
         String userId = requestDto.getUserId();
         String password = requestDto.getPassword();
 
         Optional<Customer> checkUsername = customerRepository.findByUserId(userId);
         if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+            throw new UserException(ErrorType.DUPLICATE_ACCOUNT_ID);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -40,7 +47,7 @@ public class CustomerService {
         customerRepository.save(customer);
         insertPasswordHistory(customer);
 
-        return "회원가입 성공";
+        return new SignupResponseDto(customer);
     }
 
     //유저 정보 조회
@@ -57,7 +64,7 @@ public class CustomerService {
     @Transactional
     public String updatePassword(PasswordRequestDTO request, Customer customer) {
         //1. 현재 저장된 비밀번호랑 request에서 현재 비밀번호라고 입력한 애랑 일치하는지!
-        if (! passwordEncoder.matches(request.getCurrentPassword(), customer.getPassword())) {
+        if (!passwordEncoder.matches(request.getCurrentPassword(), customer.getPassword())) {
             throw new IllegalArgumentException("현재 비밀번호와 일치하지 않습니다.");
         }
 
@@ -85,6 +92,16 @@ public class CustomerService {
         return customer.getUserId();
     }
 
+    @Transactional
+    public String logout(String userId) {
+        // 유저 확인
+        Customer customer = this.findByUserId(userId);
+
+        customer.removeRefreshToken();
+
+        return customer.getUserId();
+    }
+
     //프로필 업데이트 메서드
     // customerId 사용자 ID
     // request 프로필 업데이트 요청 DTO (ProfileRequest)
@@ -106,5 +123,27 @@ public class CustomerService {
                 .build();
 
         passwordHistoryRepository.save(passwordHistory);
+    }
+
+    @Transactional
+    public String withdrawCustomer(WithdrawRequestDto requestDto, String userId) {
+        // 유저 확인
+        Customer customer = this.findByUserId(userId);
+        // 이미 탈퇴한 회원인지 확인
+        if(customer.getUserStatus().equals(UserStatus.DEACTIVATE)){
+            throw new UserException(ErrorType.DEACTIVATE_USER);
+        }
+        // 비밀번호 확인
+        if(!passwordEncoder.matches(requestDto.getPassword(), customer.getPassword())){
+            throw new UserException(ErrorType.INVALID_PASSWORD);
+        }
+
+        customer.withdrawCustomer();
+
+        return customer.getUserId();
+    }
+
+    private Customer findByUserId(String userId){
+        return customerRepository.findByUserId(userId).orElseThrow(()-> new UserException(ErrorType.NOT_FOUND_USER));
     }
 }

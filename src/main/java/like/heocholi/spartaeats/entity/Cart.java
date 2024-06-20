@@ -3,7 +3,6 @@ package like.heocholi.spartaeats.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,29 +14,31 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "order_menus")
-public class OrderMenu extends Timestamped{
+@Table(name = "carts")
+public class Cart {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
 	private Long id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "order_id", nullable = false)
-	private Order order;
+	@JoinColumn(name = "customer_id", nullable = false)
+	private Customer customer;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id", nullable = false)
+	private Store store;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "menu_id", nullable = false)
 	private Menu menu;
 	
-	private int count;
-	
-	private int price;
+	private int quantity;
 	
 	@Builder
-	public OrderMenu(Order order, Menu menu, int count, int price) {
-		this.order = order;
+	public Cart(Customer customer, Store store, Menu menu, int quantity) {
+		this.customer = customer;
+		this.store = store;
 		this.menu = menu;
-		this.count = count;
-		this.price = price;
+		this.quantity = quantity;
 	}
 }
