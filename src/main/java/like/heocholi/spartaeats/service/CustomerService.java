@@ -9,6 +9,7 @@ import like.heocholi.spartaeats.dto.SignupRequestDto;
 import like.heocholi.spartaeats.dto.SignupResponseDto;
 import like.heocholi.spartaeats.dto.WithdrawRequestDto;
 import like.heocholi.spartaeats.entity.Customer;
+import like.heocholi.spartaeats.exception.PasswordException;
 import like.heocholi.spartaeats.exception.UserException;
 import like.heocholi.spartaeats.repository.CustomerRepository;
 import like.heocholi.spartaeats.repository.PasswordHistoryRepository;
@@ -65,15 +66,15 @@ public class CustomerService {
     public String updatePassword(PasswordRequestDTO request, Customer customer) {
         //1. 현재 저장된 비밀번호랑 request에서 현재 비밀번호라고 입력한 애랑 일치하는지!
         if (!passwordEncoder.matches(request.getCurrentPassword(), customer.getPassword())) {
-            throw new IllegalArgumentException("현재 비밀번호와 일치하지 않습니다.");
+            throw new PasswordException("현재 비밀번호와 일치하지 않습니다.");
         }
 
         //2. 얘가 새로 바꾸려고 하는 비밀번호랑, 얘가 최근에 사용했던 비밀번호 3개 중에 일치하는 게 있는지!
         List<PasswordHistory> passwordHistories = passwordHistoryRepository.findTop3ByCustomerOrderByCreatedAtDesc(customer);
 
         for (PasswordHistory passwordHistory : passwordHistories) {
-            if (passwordEncoder.matches(passwordHistory.getPassword(), request.getNewPassword())) {
-                throw new IllegalArgumentException("최근 3번 안에 사용한 비밀번호로는 변경할 수 없습니다.");
+            if (passwordEncoder.matches(request.getNewPassword(), passwordHistory.getPassword())) {
+                throw new PasswordException("최근 3번 안에 사용한 비밀번호로는 변경할 수 없습니다.");
             }
         }
 
