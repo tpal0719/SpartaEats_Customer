@@ -58,4 +58,8 @@ public class Order extends Timestamped{
 		this.orderMenuList = orderMenuList;
 		this.totalPrice = totalPrice;
 	}
+	
+	public void cancelOrder() {
+		this.state = OrderState.ORDER_CANCELLED;
+	}
 }

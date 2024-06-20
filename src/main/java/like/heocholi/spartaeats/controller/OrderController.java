@@ -6,6 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,6 +66,20 @@ public class OrderController {
 			.statusCode(HttpStatus.OK.value())
 			.message("주문 상세 정보를 불러왔습니다.")
 			.data(orderResponseDTO)
+			.build();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+	}
+	
+	// 주문 취소하기
+	@PutMapping("/{id}")
+	public ResponseEntity<ResponseMessage<Long>> cancelOrder(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		Long orderId = orderService.cancelOrder(id, userDetails.getCustomer());
+		
+		ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+			.statusCode(HttpStatus.OK.value())
+			.message("주문이 취소되었습니다.")
+			.data(orderId)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

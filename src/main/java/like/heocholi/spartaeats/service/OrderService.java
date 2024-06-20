@@ -89,6 +89,19 @@ public class OrderService {
 	}
 	
 	/*
+	 * 4. 주문 취소하기
+	 */
+	@Transactional
+	public Long cancelOrder(Long orderId, Customer customer) {
+		Order order = getOrder(orderId);
+		checkValidateUser(order, customer);
+		
+		order.cancelOrder();
+		
+		return orderId;
+	}
+	
+	/*
 	 * 주문 내역 조회
 	 */
 	private Order getOrder(Long orderId) {
