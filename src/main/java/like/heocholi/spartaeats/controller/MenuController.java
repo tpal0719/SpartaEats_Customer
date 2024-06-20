@@ -1,8 +1,10 @@
 package like.heocholi.spartaeats.controller;
 
+import like.heocholi.spartaeats.dto.ResponseMessage;
 import like.heocholi.spartaeats.entity.Menu;
 import like.heocholi.spartaeats.service.MenuService;
 import org.apache.catalina.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +23,7 @@ public class MenuController {
 
     //메뉴 전체 조회
     @GetMapping("/stores/{storeId}/menus")
-    public List<Menu> getMenus(@PathVariable int storeId) {
+    public ResponseEntity<ResponseMessage> getMenus(@PathVariable int storeId) {
         return menuService.getMenus(storeId);
     }
 
