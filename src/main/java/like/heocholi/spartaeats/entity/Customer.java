@@ -59,4 +59,8 @@ public class Customer extends Timestamped{
 		}
 		return false;
 	}
+
+	public void withdrawCustomer() {
+		this.userStatus = UserStatus.DEACTIVATE;
+	}
 }
