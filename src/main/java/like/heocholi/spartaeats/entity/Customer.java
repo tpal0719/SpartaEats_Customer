@@ -1,38 +1,37 @@
 package like.heocholi.spartaeats.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import like.heocholi.spartaeats.constants.UserRole;
 import like.heocholi.spartaeats.constants.UserStatus;
+import like.heocholi.spartaeats.dto.ProfileRequestDTO;
 import like.heocholi.spartaeats.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Table(name = "customers")
 @NoArgsConstructor
-public class Customer extends Timestamped{
+public class Customer extends Timestamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String userId;
-	
+
 	private String name;
-	
+
 	private String password;
-	
+
 	private String address;
-	
+
 	private String refreshToken;
+
+	private String bio; // 한 줄 소개 필드
 
 	@Enumerated(value = EnumType.STRING)
 	private UserStatus userStatus;
@@ -54,9 +53,17 @@ public class Customer extends Timestamped{
 	}
 
 	public boolean validateRefreshToken(String refreshToken){
-		if(this.refreshToken != null && this.refreshToken.equals(refreshToken)){
-			return true;
-		}
-		return false;
+		return this.refreshToken != null && this.refreshToken.equals(refreshToken);
+	}
+
+	// 프로필 업데이트 메서드
+	public void updateProfile(ProfileRequestDTO requestDTO) {
+		this.name = requestDTO.getName() != null ? requestDTO.getName() : name;
+		this.bio = requestDTO.getBio() != null ? requestDTO.getBio() : bio;
+	}
+
+	// 비밀번호 업데이트 메서드
+	public void updatePassword(String newPassword) {
+		this.password = newPassword;
 	}
 }
