@@ -17,8 +17,8 @@ public class MenuController {
     // R
     //메뉴 단건 조회
     @GetMapping("/stores/{storeId}/menus/{menuId}")
-    public Menu getMenu(@PathVariable int storeId, @PathVariable int menuId) {
-        return menuService.getMenu();
+    public ResponseEntity<ResponseMessage> getMenu(@PathVariable int storeId, @PathVariable int menuId) {
+        return menuService.getMenu(storeId,menuId);
     }
 
     //메뉴 전체 조회

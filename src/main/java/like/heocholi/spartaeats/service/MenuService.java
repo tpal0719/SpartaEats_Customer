@@ -19,9 +19,17 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
 
-    public Menu getMenu() {
+    public ResponseEntity<ResponseMessage> getMenu(int storeId, int menuId) {
 
-        return null;
+        Menu menu = menuRepository.findByStoreIdAndMenuId(storeId,menuId).orElse(null);
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                ResponseMessage.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message("해당 메뉴 조회가 완료되었습니다.")
+                        .data(menu)
+                        .build()
+        );
     }
 
     public ResponseEntity<ResponseMessage> getMenus(int storeId) {
@@ -31,10 +39,11 @@ public class MenuService {
         return ResponseEntity.status(HttpStatus.OK).body(
                 ResponseMessage.builder()
                         .statusCode(HttpStatus.OK.value())
-                        .message("게시물 조회가 완료 되었습니다.")
+                        .message("메뉴 조회가 완료되었습니다.")
                         .data(menus)
                         .build()
         );
     }
+
 
 }
