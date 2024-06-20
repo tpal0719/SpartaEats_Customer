@@ -8,10 +8,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "order_menus")
-public class OrderMenu {
+public class OrderMenu extends Timestamped{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -28,4 +33,11 @@ public class OrderMenu {
 	
 	private int price;
 	
+	@Builder
+	public OrderMenu(Order order, Menu menu, int count, int price) {
+		this.order = order;
+		this.menu = menu;
+		this.count = count;
+		this.price = price;
+	}
 }
