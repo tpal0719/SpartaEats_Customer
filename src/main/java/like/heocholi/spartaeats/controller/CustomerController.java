@@ -3,6 +3,7 @@ package like.heocholi.spartaeats.controller;
 import jakarta.validation.Valid;
 import like.heocholi.spartaeats.dto.ResponseMessage;
 import like.heocholi.spartaeats.dto.SignupRequestDto;
+import like.heocholi.spartaeats.dto.SignupResponseDto;
 import like.heocholi.spartaeats.dto.WithdrawRequestDto;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.service.CustomerService;
@@ -21,10 +22,26 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<?> signup(@RequestBody @Valid SignupRequestDto requestDto){
+        SignupResponseDto responseDto = customerService.signup(requestDto);
+        ResponseMessage<SignupResponseDto> responseMessage = ResponseMessage.<SignupResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("회원가입 성공")
+                .data(responseDto)
+                .build();
 
-        String resultMessage = customerService.signup(requestDto);
+        return ResponseEntity.ok().body(responseMessage);
+    }
 
-        return ResponseEntity.ok(resultMessage);
+    @PutMapping("/logout")
+    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        String userId = customerService.logout(userDetails.getUsername());
+        ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("로그아웃 성공")
+                .data(userId)
+                .build();
+
+        return ResponseEntity.ok().body(responseMessage);
     }
 
     @PutMapping("/withdraw")

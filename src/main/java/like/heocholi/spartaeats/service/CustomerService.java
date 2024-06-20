@@ -3,12 +3,12 @@ package like.heocholi.spartaeats.service;
 import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.constants.UserStatus;
 import like.heocholi.spartaeats.dto.SignupRequestDto;
+import like.heocholi.spartaeats.dto.SignupResponseDto;
 import like.heocholi.spartaeats.dto.WithdrawRequestDto;
 import like.heocholi.spartaeats.entity.Customer;
 import like.heocholi.spartaeats.exception.UserException;
 import like.heocholi.spartaeats.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.With;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class CustomerService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public String signup(SignupRequestDto requestDto) {
+    public SignupResponseDto signup(SignupRequestDto requestDto) {
         String userId = requestDto.getUserId();
         String password = requestDto.getPassword();
 
@@ -38,7 +38,17 @@ public class CustomerService {
 
         customerRepository.save(customer);
 
-        return "회원가입 성공";
+        return new SignupResponseDto(customer);
+    }
+
+    @Transactional
+    public String logout(String userId) {
+        // 유저 확인
+        Customer customer = this.findByUserId(userId);
+
+        customer.removeRefreshToken();
+
+        return customer.getUserId();
     }
 
     @Transactional
@@ -62,6 +72,7 @@ public class CustomerService {
     private Customer findByUserId(String userId){
         return customerRepository.findByUserId(userId).orElseThrow(()-> new UserException(ErrorType.NOT_FOUND_USER));
     }
+
 
 
 }
