@@ -2,9 +2,14 @@ package like.heocholi.spartaeats.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import like.heocholi.spartaeats.dto.OrderListResponseDTO;
 import like.heocholi.spartaeats.dto.OrderResponseDTO;
 import like.heocholi.spartaeats.entity.Cart;
 import like.heocholi.spartaeats.entity.Customer;
@@ -57,5 +62,37 @@ public class OrderService {
 		cartService.deleteAllCart(customer);
 		
 		return new OrderResponseDTO(saveOrder);
+	}
+	
+	/*
+	 * 2. 주문 내역 조회
+	 */
+	public OrderListResponseDTO getOrders(Integer page, Customer customer) {
+		Pageable pageable = createPageable(page);
+		Page<Order> orderPage = orderRepository.findAllByCustomer(customer, pageable);
+		
+		checkValidatePage(page, orderPage);
+		
+		return new OrderListResponseDTO(page, orderPage);
+	}
+	
+	/*
+	 * 페이지네이션
+	 */
+	private Pageable createPageable(Integer page) {
+		return PageRequest.of(page-1, 5, Sort.by("createdAt").descending());
+	}
+	
+	/*
+	 * 페이지 유효성 검사
+	 */
+	private static void checkValidatePage(Integer page, Page<Order> orderPage) {
+		if (orderPage.getTotalElements() == 0) {
+			throw new ContentNotFoundException("주문 내역이 없습니다.");
+		}
+		
+		if (page > orderPage.getTotalPages() || page < 1) {
+			throw new ContentNotFoundException("페이지가 존재하지 않습니다.");
+		}
 	}
 }
