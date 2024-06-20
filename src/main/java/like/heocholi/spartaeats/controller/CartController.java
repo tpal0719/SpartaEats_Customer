@@ -3,6 +3,7 @@ package like.heocholi.spartaeats.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import like.heocholi.spartaeats.dto.CartRequestDTO;
+import like.heocholi.spartaeats.dto.CartResponseDTO;
 import like.heocholi.spartaeats.dto.ResponseMessage;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.service.CartService;
@@ -33,5 +35,19 @@ public class CartController {
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+	}
+	
+	// 장바구니 목록 불러오기
+	@GetMapping
+	public ResponseEntity<ResponseMessage<CartResponseDTO>> getCart(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		CartResponseDTO cartResponseDTO = cartService.getCarts(userDetails.getCustomer());
+		
+		ResponseMessage<CartResponseDTO> responseMessage = ResponseMessage.<CartResponseDTO>builder()
+			.statusCode(HttpStatus.OK.value())
+			.message("장바구니 목록을 불러왔습니다.")
+			.data(cartResponseDTO)
+			.build();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 	}
 }

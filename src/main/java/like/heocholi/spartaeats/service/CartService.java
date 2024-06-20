@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import like.heocholi.spartaeats.dto.CartRequestDTO;
+import like.heocholi.spartaeats.dto.CartResponseDTO;
 import like.heocholi.spartaeats.entity.Cart;
 import like.heocholi.spartaeats.entity.Customer;
 import like.heocholi.spartaeats.entity.Menu;
@@ -54,6 +55,23 @@ public class CartService {
 		cartRepository.save(cart);
 		
 		return menuId;
+	}
+	
+	/*
+	 * 2. 장바구니 목록 불러오기
+	 */
+	public CartResponseDTO getCarts(Customer customer) {
+		List<Cart> cartList = getCartList(customer);
+		
+		if (cartList.isEmpty()) {
+			throw new CartException("장바구니에 담긴 메뉴가 없습니다.");
+		}
+		
+		String storeName = cartList.get(0).getStore().getName();
+		List<String> menuNames = cartList.stream().map(cart -> cart.getMenu().getName()).toList();
+		int totalPrice = cartList.stream().mapToInt(cart -> cart.getMenu().getPrice()).sum();
+		
+		return new CartResponseDTO(storeName, menuNames, totalPrice);
 	}
 	
 	/*
