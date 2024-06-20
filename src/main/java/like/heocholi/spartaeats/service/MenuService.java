@@ -16,10 +16,6 @@ public class MenuService {
 
     private final MenuRepository postRepository;
 
-    public void createMenu(int storeId, User user) {
-
-    }
-
     public Menu getMenu() {
 
         return null;
@@ -30,11 +26,4 @@ public class MenuService {
         return null;
     }
 
-    public void updateMenu(int menuId, User user) {
-
-    }
-
-    public void deleteMenu(int menuId, User user) {
-
-    }
 }

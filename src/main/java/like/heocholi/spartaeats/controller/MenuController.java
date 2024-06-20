@@ -12,14 +12,6 @@ public class MenuController {
 
     MenuService menuService;
 
-    // C
-    //메뉴 등록
-    @GetMapping("/stores/{storeId}/menus")
-    public void createMenu(@PathVariable int storeId, User user) {
-        //return menuService.createMenu(storeId,user);
-        menuService.createMenu(storeId,user);
-    }
-
     // R
     //메뉴 단건 조회
     @GetMapping("/stores/{storeId}/menus/{menuId}")
@@ -34,20 +26,4 @@ public class MenuController {
     }
 
 
-
-    // U
-    //메뉴 수정
-    @PutMapping("/menus/{menuId}")
-    public void updateMenu(@PathVariable int menuId, User user) {
-        //return menuService.updateMenu(menuId,user);
-        menuService.updateMenu(menuId,user);
-    }
-
-    // D
-    //메뉴 삭제
-    @DeleteMapping("/menus/{menuId}")
-    public void deleteMenu(@PathVariable int menuId, User user) {
-        //return menuService.deleteMenu(menuId,user);
-        menuService.deleteMenu(menuId,user);
-    }
 }
