@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +49,22 @@ public class OrderController {
 			.statusCode(HttpStatus.OK.value())
 			.message("주문 목록을 불러왔습니다.")
 			.data(orderResponseDTOList)
+			.build();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+	}
+	
+	// 주문 상세 정보 불러오기
+	@GetMapping("/{id}")
+	public ResponseEntity<ResponseMessage<OrderResponseDTO>> getOrderDetail(@PathVariable Long id,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		
+		OrderResponseDTO orderResponseDTO = orderService.getOrderDetails(id, userDetails.getCustomer());
+		
+		ResponseMessage<OrderResponseDTO> responseMessage = ResponseMessage.<OrderResponseDTO>builder()
+			.statusCode(HttpStatus.OK.value())
+			.message("주문 상세 정보를 불러왔습니다.")
+			.data(orderResponseDTO)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

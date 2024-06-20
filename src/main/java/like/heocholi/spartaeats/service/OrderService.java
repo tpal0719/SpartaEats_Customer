@@ -17,6 +17,7 @@ import like.heocholi.spartaeats.entity.Order;
 import like.heocholi.spartaeats.entity.OrderMenu;
 import like.heocholi.spartaeats.entity.Store;
 import like.heocholi.spartaeats.exception.ContentNotFoundException;
+import like.heocholi.spartaeats.exception.OrderException;
 import like.heocholi.spartaeats.repository.OrderMenuRepository;
 import like.heocholi.spartaeats.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -74,6 +75,33 @@ public class OrderService {
 		checkValidatePage(page, orderPage);
 		
 		return new OrderListResponseDTO(page, orderPage);
+	}
+	
+	
+	/*
+	 * 3. 주문 상세 정보 조회
+	 */
+	public OrderResponseDTO getOrderDetails(Long orderId, Customer customer) {
+		Order order = getOrder(orderId);
+		checkValidateUser(order, customer);
+		
+		return new OrderResponseDTO(order);
+	}
+	
+	/*
+	 * 주문 내역 조회
+	 */
+	private Order getOrder(Long orderId) {
+		return orderRepository.findById(orderId).orElseThrow(() -> new ContentNotFoundException("주문 내역이 존재하지 않습니다."));
+	}
+	
+	/*
+	 * 사용자 유효성 검사
+	 */
+	private void checkValidateUser(Order order, Customer customer) {
+		if (!order.getCustomer().getId().equals(customer.getId())) {
+			throw new OrderException("본인의 주문 내역이 아닙니다.");
+		}
 	}
 	
 	/*
