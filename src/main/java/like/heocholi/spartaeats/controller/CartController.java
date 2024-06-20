@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,6 +61,20 @@ public class CartController {
 		ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
 			.statusCode(HttpStatus.OK.value())
 			.message("장바구니가 비워졌습니다.")
+			.build();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+	}
+	
+	// 장바구니 단일 삭제
+	@DeleteMapping("/{menuId}")
+	public ResponseEntity<ResponseMessage<Long>> deleteCart(@PathVariable Long menuId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+		Long deleteMenuId = cartService.deleteCart(menuId, userDetails.getCustomer());
+		
+		ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+			.statusCode(HttpStatus.OK.value())
+			.message("장바구니에서 메뉴가 삭제되었습니다.")
+			.data(deleteMenuId)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

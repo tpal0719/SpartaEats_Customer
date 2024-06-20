@@ -85,6 +85,20 @@ public class CartService {
 	}
 	
 	/*
+	 * 4. 장바구니 단일 삭제
+	 */
+	@Transactional
+	public Long deleteCart(Long menuId, Customer customer) {
+		Menu menu = getMenu(menuId);
+		Cart cart = cartRepository.findByMenuAndCustomer(menu, customer)
+			.orElseThrow(() -> new CartException("해당 메뉴가 장바구니에 없습니다."));
+		
+		cartRepository.delete(cart);
+		
+		return menuId;
+	}
+	
+	/*
 	 * 메뉴 조회
 	 */
 	private Menu getMenu(Long menuId) {
