@@ -32,6 +32,7 @@ public class Order extends Timestamped{
 	
 	private String address;
 	
+	@Column(columnDefinition = "varchar(30)")
 	@Enumerated(EnumType.STRING)
 	private OrderState state;
 	
