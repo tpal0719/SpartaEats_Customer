@@ -22,32 +22,27 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
-    public ResponseEntity<ResponseMessage> getMenu(Long storeId, Long menuId) {
+    public Menu getMenu(Long storeId, Long menuId) {
+        findStoreById(storeId);
+        Menu menu = menuRepository.findByStoreIdAndId(storeId,menuId).orElseThrow(() -> new IllegalArgumentException("음식점에 해당 메뉴가 존재하지 않습니다."));
 
-        Store store =storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("선택한 음식점이 존재하지 않습니다."));
-        Menu menu = menuRepository.findByStoreIdAndMenuId(storeId,menuId).orElseThrow(() -> new IllegalArgumentException("음식점에 해당 메뉴가 존재하지 않습니다."));
-
-        return ResponseEntity.status(HttpStatus.OK).body(
-                ResponseMessage.builder()
-                        .statusCode(HttpStatus.OK.value())
-                        .message(store.getName()+" 에 "+menu.getName()+" 조회가 완료되었습니다.")
-                        .data(menu)
-                        .build()
-        );
+        return menu;
     }
 
-    public ResponseEntity<ResponseMessage> getMenus(Long storeId) {
-
-        Store store =storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("선택한 음식점이 존재하지 않습니다."));
+    public List<Menu> getMenus(Long storeId) {
+        findStoreById(storeId);
         List<Menu> menus = menuRepository.findAllByStoreId(storeId).orElseThrow(() -> new IllegalArgumentException("음식점에 메뉴가 존재하지 않습니다."));
 
-        return ResponseEntity.status(HttpStatus.OK).body(
-                ResponseMessage.builder()
-                        .statusCode(HttpStatus.OK.value())
-                        .message(store.getName()+" 에 모든 메뉴 조회가 완료되었습니다.")
-                        .data(menus)
-                        .build()
-        );
+        return menus;
+    }
+
+
+
+
+    public Store findStoreById(Long storeId) {
+        Store store =storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("선택한 음식점이 존재하지 않습니다."));
+
+        return store;
     }
 
 
