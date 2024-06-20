@@ -17,13 +17,13 @@ public class MenuController {
     // R
     //메뉴 단건 조회
     @GetMapping("/stores/{storeId}/menus/{menuId}")
-    public ResponseEntity<ResponseMessage> getMenu(@PathVariable int storeId, @PathVariable int menuId) {
+    public ResponseEntity<ResponseMessage> getMenu(@PathVariable Long storeId, @PathVariable Long menuId) {
         return menuService.getMenu(storeId,menuId);
     }
 
     //메뉴 전체 조회
     @GetMapping("/stores/{storeId}/menus")
-    public ResponseEntity<ResponseMessage> getMenus(@PathVariable int storeId) {
+    public ResponseEntity<ResponseMessage> getMenus(@PathVariable Long storeId) {
         return menuService.getMenus(storeId);
     }
 
