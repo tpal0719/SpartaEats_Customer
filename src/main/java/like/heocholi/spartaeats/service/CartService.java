@@ -75,6 +75,16 @@ public class CartService {
 	}
 	
 	/*
+	 * 3. 장바구니 전체 삭제
+	 */
+	@Transactional
+	public void deleteAllCart(Customer customer) {
+		List<Cart> cartList = getCartList(customer);
+		
+		cartRepository.deleteAll(cartList);
+	}
+	
+	/*
 	 * 메뉴 조회
 	 */
 	private Menu getMenu(Long menuId) {

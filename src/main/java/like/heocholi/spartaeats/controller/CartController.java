@@ -3,6 +3,7 @@ package like.heocholi.spartaeats.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,4 +51,18 @@ public class CartController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 	}
+	
+	// 장바구니 전체 삭제
+	@DeleteMapping
+	public ResponseEntity<ResponseMessage<String>> deleteAllCart(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		cartService.deleteAllCart(userDetails.getCustomer());
+		
+		ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+			.statusCode(HttpStatus.OK.value())
+			.message("장바구니가 비워졌습니다.")
+			.build();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+	}
+	
 }
