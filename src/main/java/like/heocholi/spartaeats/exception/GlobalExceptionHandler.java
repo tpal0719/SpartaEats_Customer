@@ -33,5 +33,15 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
 	}
 	
+	@ExceptionHandler(CartException.class)
+	public ResponseEntity<ErrorMessage<String>> handleNormalException(Exception e) {
+
+		ErrorMessage errorMessage = ErrorMessage.builder()
+			.statusCode(HttpStatus.BAD_REQUEST.value())
+			.message(e.getMessage())
+			.build();
+		
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+	}
 	
 }
