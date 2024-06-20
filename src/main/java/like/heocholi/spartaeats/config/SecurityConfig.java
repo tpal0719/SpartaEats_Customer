@@ -73,6 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(HttpMethod.POST, "/customers").permitAll()
                         .requestMatchers("/customers/login").permitAll()
+                        .requestMatchers("/stores/**").permitAll()
                         .anyRequest().authenticated()
         );
 
