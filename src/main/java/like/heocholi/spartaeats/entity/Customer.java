@@ -3,11 +3,9 @@ package like.heocholi.spartaeats.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import like.heocholi.spartaeats.constants.UserRole;
 import like.heocholi.spartaeats.constants.UserStatus;
@@ -58,5 +56,13 @@ public class Customer extends Timestamped{
 			return true;
 		}
 		return false;
+	}
+
+	public void withdrawCustomer() {
+		this.userStatus = UserStatus.DEACTIVATE;
+	}
+
+	public void removeRefreshToken() {
+		this.refreshToken = "";
 	}
 }

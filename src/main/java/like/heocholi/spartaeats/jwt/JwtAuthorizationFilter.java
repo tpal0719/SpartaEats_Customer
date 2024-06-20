@@ -5,8 +5,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.constants.UserRole;
 import like.heocholi.spartaeats.entity.Customer;
+import like.heocholi.spartaeats.exception.JwtException;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +55,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
             setAuthentication(info.getSubject());
         } catch (Exception e){
             log.error("username = {}, message = {}", info.getSubject(), "인증 정보를 찾을 수 없습니다.");
-            // TODO: Exception response 추가?
+            throw new JwtException(ErrorType.NOT_FOUND_AUTHENTICATION_INFO);
         }
     }
 
@@ -75,12 +77,10 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
                     setAuthentication(info.getSubject());
                 } catch (Exception e) {
                     log.error(e.getMessage());
-                    // TODO: Exception 처리
-                    return;
+                    throw new JwtException(ErrorType.NOT_FOUND_AUTHENTICATION_INFO);
                 }
             } else {
-                // TODO: Exception 처리
-                throw new IllegalArgumentException("리프레시 토큰이 없거나, 유효하지 않습니다.");
+                throw new JwtException(ErrorType.INVALID_REFRESH_TOKEN);
             }
         }
     }

@@ -1,16 +1,12 @@
 package like.heocholi.spartaeats.service;
 
 import like.heocholi.spartaeats.dto.MenuResponseDto;
-import like.heocholi.spartaeats.dto.ResponseMessage;
 import like.heocholi.spartaeats.entity.Menu;
 import like.heocholi.spartaeats.entity.Store;
 import like.heocholi.spartaeats.repository.MenuRepository;
 import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
