@@ -26,35 +26,50 @@ public class CustomerController {
     @Autowired
     private final CustomerService customerService;
 
-    // 회원가입 API
-    // request 회원가입 요청 DTO (SignupRequestDto)
-    // ResponseEntity<String> 회원가입 결과 메시지
+    /**
+     * 회원가입 API
+     * @param requestDto 회원가입 내용
+     * @return 회원가입 정보, 응답 상태, 메시지
+     */
     @PostMapping
-    public ResponseEntity<?> signup(@RequestBody @Valid SignupRequestDto requestDto){
+    public ResponseEntity<ResponseMessage<SignupResponseDto>> signup(@RequestBody @Valid SignupRequestDto requestDto){
         SignupResponseDto responseDto = customerService.signup(requestDto);
+
         ResponseMessage<SignupResponseDto> responseMessage = ResponseMessage.<SignupResponseDto>builder()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .message("회원가입 성공")
                 .data(responseDto)
                 .build();
 
-        return ResponseEntity.ok().body(responseMessage);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
+    /**
+     * 로그아웃 API
+     * @param userDetails 유저 정보
+     * @return 회원Id, 응답 상태, 메시지
+     */
     @PutMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<ResponseMessage<String>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
         String userId = customerService.logout(userDetails.getUsername());
+
         ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("로그아웃 성공")
                 .data(userId)
                 .build();
 
-        return ResponseEntity.ok().body(responseMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    /**
+     * 회원 탈퇴 API
+     * @param requestDto 회원탈퇴 내용(비밀번호)
+     * @param userDetails 회원 정보
+     * @return 회원Id, 응답상태, 메시지
+     */
     @PutMapping("/withdraw")
-    public ResponseEntity<?> withdrawCustomer(@RequestBody WithdrawRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<String>> withdrawCustomer(@RequestBody WithdrawRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userId = userDetails.getUsername();
         String withdrawnUserId = customerService.withdrawCustomer(requestDto, userId);
 
@@ -64,7 +79,7 @@ public class CustomerController {
                 .data(withdrawnUserId)
                 .build();
 
-        return ResponseEntity.ok().body(responseMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
     @GetMapping
