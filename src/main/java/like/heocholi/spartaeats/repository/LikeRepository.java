@@ -9,5 +9,4 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
     Optional<Like> findByCustomerAndReview(Customer customer, Review review);
-
 }

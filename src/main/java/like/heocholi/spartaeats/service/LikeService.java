@@ -31,21 +31,16 @@ public class LikeService {
         }
 
         boolean result = likeUpdate(customer, review);
-        updateLike(review);
+        review.updateLike(result);
 
         return result;
     }
 
-    private void updateLike(Review review) {
-        int countLikes = reviewRepository.countByReviewAndIsLike(review, true);
-        review.updateLike(countLikes);
-    }
-
     private boolean likeUpdate(Customer customer, Review review) {
         Optional<Like> optionalLike = likeRepository.findByCustomerAndReview(customer, review);
-        Like like = new Like();
+        Like like;
 
-        if(!optionalLike.isEmpty()) {
+        if(optionalLike.isPresent()) {
             like = optionalLike.get();
             like.update();
         } else {

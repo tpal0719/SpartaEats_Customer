@@ -1,13 +1,6 @@
 package like.heocholi.spartaeats.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -36,7 +29,7 @@ public class Review extends Timestamped{
 	
 	private int likeCount;
 
-	public void updateLike(int likeCount) {
-		this.likeCount = likeCount;
+	public void updateLike(boolean result) {
+		this.likeCount = result ? this.likeCount + 1 : this.likeCount - 1;
 	}
 }
