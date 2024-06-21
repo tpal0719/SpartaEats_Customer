@@ -1,6 +1,5 @@
 package like.heocholi.spartaeats.jwt;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +11,7 @@ import like.heocholi.spartaeats.dto.ErrorMessage;
 import like.heocholi.spartaeats.dto.LoginRequestDto;
 import like.heocholi.spartaeats.dto.ResponseMessage;
 import like.heocholi.spartaeats.entity.Customer;
-import like.heocholi.spartaeats.exception.UserException;
+import like.heocholi.spartaeats.exception.CustomerException;
 import like.heocholi.spartaeats.repository.CustomerRepository;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +57,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
         Customer customer = ((UserDetailsImpl) authResult.getPrincipal()).getCustomer();
         if(customer.getUserStatus().equals(UserStatus.DEACTIVATE)){
-            throw new UserException(ErrorType.NOT_FOUND_USER);
+            throw new CustomerException(ErrorType.NOT_FOUND_USER);
         }
 
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
