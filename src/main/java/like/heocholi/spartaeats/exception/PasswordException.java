@@ -1,7 +1,9 @@
 package like.heocholi.spartaeats.exception;
 
-public class PasswordException extends IllegalArgumentException {
-	public PasswordException(String message) {
-		super(message);
+import like.heocholi.spartaeats.constants.ErrorType;
+
+public class PasswordException extends CustomerException {
+	public PasswordException(ErrorType errorType) {
+		super(errorType);
 	}
 }
