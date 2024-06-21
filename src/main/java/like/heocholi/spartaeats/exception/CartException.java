@@ -1,7 +1,9 @@
 package like.heocholi.spartaeats.exception;
 
-public class CartException extends IllegalArgumentException{
-	public CartException(String message) {
-		super(message);
+import like.heocholi.spartaeats.constants.ErrorType;
+
+public class CartException extends CustomException{
+	public CartException(ErrorType errorType) {
+		super(errorType);
 	}
 }
