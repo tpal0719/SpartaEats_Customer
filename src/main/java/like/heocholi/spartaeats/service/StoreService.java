@@ -25,9 +25,8 @@ public class StoreService {
 
     public StoreResponseDto readStore(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("해당 가게가 존재하지 않습니다."));
-        List<Menu> menuList = menuRepository.findByStoreId(storeId);
 
-        return new StoreResponseDto(store, menuList);
+        return new StoreResponseDto(store);
     }
 
 
