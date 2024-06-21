@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/stores")
 public class StoreController {
-
     private final StoreService storeService;
 
     // 음식점 상세 보기

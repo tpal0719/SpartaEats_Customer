@@ -1,10 +1,11 @@
 package like.heocholi.spartaeats.dto;
 
-import like.heocholi.spartaeats.entity.Store;
-import lombok.Getter;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import like.heocholi.spartaeats.entity.Store;
+import lombok.Getter;
 
 @Getter
 public class StorePageResponseDto {
