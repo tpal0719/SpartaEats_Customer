@@ -24,7 +24,10 @@ public class Store extends Timestamped{
 	
 	@Enumerated(EnumType.STRING)
 	private RestaurantType type;
-	
+
 	@OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
-	List<Menu> menuList;
+	private List<Menu> menuList;
+
+	@OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
+	private List<Order> orders;
 }

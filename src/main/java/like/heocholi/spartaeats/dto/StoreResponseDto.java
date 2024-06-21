@@ -12,11 +12,11 @@ import java.util.List;
 @Getter
 public class StoreResponseDto {
 
-    private final Long id;
-    private final String name;
-    private final String address;
-    private final RestaurantType type;
-    private final List<Menu> menuList;
+    private Long id;
+    private String name;
+    private String address;
+    private RestaurantType type;
+    private List<Menu> menuList;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -32,6 +32,15 @@ public class StoreResponseDto {
         this.createdAt = store.getCreatedAt();
         this.modifiedAt = store.getModifiedAt();
         this.menuList = menuList;
+    }
+
+    public StoreResponseDto(Store store) {
+        this.id = store.getId();
+        this.name = store.getName();
+        this.address = store.getAddress();
+        this.type = store.getType();
+        this.createdAt = store.getCreatedAt();
+        this.modifiedAt = store.getModifiedAt();
     }
 
 }
