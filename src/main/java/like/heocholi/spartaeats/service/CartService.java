@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.dto.CartRequestDTO;
 import like.heocholi.spartaeats.dto.CartResponseDTO;
 import like.heocholi.spartaeats.entity.Cart;
@@ -32,16 +33,15 @@ public class CartService {
 		Long storeId = cartRequestDTO.getStoreId();
 		
 		Menu menu = getMenu(menuId);
-		
 		List<Cart> cartList = getCartList(customer);
 		
 		for (Cart cart : cartList) {
 			if (!Objects.equals(storeId, cart.getStore().getId())) {
-				throw new CartException("장바구니에는 같은 가게의 메뉴만 담을 수 있습니다.");
+				throw new CartException(ErrorType.INVALID_CART);
 			}
 			
 			if (Objects.equals(menuId, cart.getMenu().getId())) {
-				throw new CartException("이미 장바구니에 담긴 메뉴입니다.");
+				throw new CartException(ErrorType.DUPLICATE_CART);
 			}
 		}
 		
@@ -64,7 +64,7 @@ public class CartService {
 		List<Cart> cartList = getCartList(customer);
 		
 		if (cartList.isEmpty()) {
-			throw new CartException("장바구니에 담긴 메뉴가 없습니다.");
+			throw new CartException(ErrorType.NOT_FOUND_CART);
 		}
 		
 		String storeName = cartList.get(0).getStore().getName();
@@ -92,7 +92,7 @@ public class CartService {
 	public Long deleteCart(Long menuId, Customer customer) {
 		Menu menu = getMenu(menuId);
 		Cart cart = cartRepository.findByMenuAndCustomer(menu, customer)
-			.orElseThrow(() -> new CartException("해당 메뉴가 장바구니에 없습니다."));
+			.orElseThrow(() -> new CartException(ErrorType.NOT_FOUND_CART_MENU));
 		
 		cartRepository.delete(cart);
 		
@@ -103,15 +103,13 @@ public class CartService {
 	 * 메뉴 조회
 	 */
 	private Menu getMenu(Long menuId) {
-		return menuRepository.findById(menuId).orElseThrow(() -> new CartException("해당 메뉴가 없습니다."));
+		return menuRepository.findById(menuId).orElseThrow(() -> new CartException(ErrorType.NOT_FOUND_MENU));
 	}
 	
 	/*
 	 * 장바구니 조회
 	 */
 	public List<Cart> getCartList(Customer customer) {
-		List<Cart> cartList = cartRepository.findByCustomer(customer);
-		
-		return cartList;
+		return cartRepository.findByCustomer(customer);
 	}
 }
