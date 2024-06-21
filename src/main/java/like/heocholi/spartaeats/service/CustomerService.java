@@ -8,9 +8,8 @@ import like.heocholi.spartaeats.constants.UserStatus;
 import like.heocholi.spartaeats.dto.SignupRequestDto;
 import like.heocholi.spartaeats.dto.SignupResponseDto;
 import like.heocholi.spartaeats.dto.WithdrawRequestDto;
-import like.heocholi.spartaeats.entity.Customer;
 import like.heocholi.spartaeats.exception.PasswordException;
-import like.heocholi.spartaeats.exception.UserException;
+import like.heocholi.spartaeats.exception.CustomerException;
 import like.heocholi.spartaeats.repository.CustomerRepository;
 import like.heocholi.spartaeats.repository.PasswordHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class CustomerService {
 
         Optional<Customer> checkUsername = customerRepository.findByUserId(userId);
         if (checkUsername.isPresent()) {
-            throw new UserException(ErrorType.DUPLICATE_ACCOUNT_ID);
+            throw new CustomerException(ErrorType.DUPLICATE_ACCOUNT_ID);
         }
 
         String encodedPassword = passwordEncoder.encode(password);
@@ -132,11 +131,11 @@ public class CustomerService {
         Customer customer = this.findByUserId(userId);
         // 이미 탈퇴한 회원인지 확인
         if(customer.getUserStatus().equals(UserStatus.DEACTIVATE)){
-            throw new UserException(ErrorType.DEACTIVATE_USER);
+            throw new CustomerException(ErrorType.DEACTIVATE_USER);
         }
         // 비밀번호 확인
         if(!passwordEncoder.matches(requestDto.getPassword(), customer.getPassword())){
-            throw new UserException(ErrorType.INVALID_PASSWORD);
+            throw new CustomerException(ErrorType.INVALID_PASSWORD);
         }
 
         customer.withdrawCustomer();
@@ -145,6 +144,6 @@ public class CustomerService {
     }
 
     private Customer findByUserId(String userId){
-        return customerRepository.findByUserId(userId).orElseThrow(()-> new UserException(ErrorType.NOT_FOUND_USER));
+        return customerRepository.findByUserId(userId).orElseThrow(()-> new CustomerException(ErrorType.NOT_FOUND_USER));
     }
 }

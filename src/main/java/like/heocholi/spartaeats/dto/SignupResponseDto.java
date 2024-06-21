@@ -12,6 +12,6 @@ public class SignupResponseDto {
     public SignupResponseDto(Customer customer) {
         this.userId = customer.getUserId();
         this.name = customer.getName();
-        this.address = customer.getName();
+        this.address = customer.getAddress();
     }
 }
