@@ -35,6 +35,7 @@ public enum ErrorType {
     NOT_FOUND_MENUS(HttpStatus.NOT_FOUND,"메뉴가 없습니다."),
     NOT_FOUND_MENU(HttpStatus.NOT_FOUND,"해당 메뉴가 존재하지 않습니다.");
 
+
     private final HttpStatus httpStatus;
     private final String message;
 }
