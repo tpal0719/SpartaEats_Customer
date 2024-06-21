@@ -23,13 +23,15 @@ public class StoreController {
     @GetMapping("/{storeId}")
     public ResponseEntity<ResponseMessage<StoreResponseDto>> readStore(@PathVariable Long storeId) {
         StoreResponseDto responseDto = storeService.readStore(storeId);
-        return ResponseEntity.ok().body(
-                ResponseMessage.<StoreResponseDto>builder()
-                        .statusCode(HttpStatus.OK.value())
-                        .message("가게 정보를 성공적으로 불러왔습니다.")
-                        .data(responseDto)
-                        .build()
-        );
+
+        ResponseMessage<StoreResponseDto> responseMessage = ResponseMessage.<StoreResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(storeId + "번 가게 상세 정보를 성공적으로 불러왔습니다.")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
     }
 
     //음식점 리스트 보기
