@@ -24,6 +24,13 @@ public enum ErrorType {
     EXPIRED_JWT(HttpStatus.FORBIDDEN, "만료된 JWT 입니다."),
     LOGGED_OUT_TOKEN(HttpStatus.FORBIDDEN, "이미 로그아웃된 토큰입니다."),
     
+    //order
+    NOT_FOUND_ORDER(HttpStatus.NOT_FOUND, "주문이 존재하지 않습니다."),
+    INVALID_ORDER_CUSTOMER(HttpStatus.BAD_REQUEST, "본인의 주문 내역이 아닙니다."),
+    
+    //page
+    INVALID_PAGE(HttpStatus.BAD_REQUEST, "페이지 번호가 올바르지 않습니다."),
+
     // cart
     INVALID_CART(HttpStatus.BAD_REQUEST, "장바구니에는 같은 가게의 메뉴만 담을 수 있습니다."),
     DUPLICATE_CART(HttpStatus.BAD_REQUEST, "이미 장바구니에 담긴 메뉴입니다."),

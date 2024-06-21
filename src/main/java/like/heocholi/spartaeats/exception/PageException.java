@@ -2,8 +2,8 @@ package like.heocholi.spartaeats.exception;
 
 import like.heocholi.spartaeats.constants.ErrorType;
 
-public class OrderException extends CustomException {
-	public OrderException(ErrorType errorType) {
+public class PageException extends CustomException {
+	public PageException(ErrorType errorType) {
 		super(errorType);
 	}
 }

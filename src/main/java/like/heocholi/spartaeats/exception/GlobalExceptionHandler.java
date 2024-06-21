@@ -43,26 +43,4 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(e.getErrorType().getHttpStatus()).body(errorMessage);
 	}
 
-	@ExceptionHandler({OrderException.class})
-	public ResponseEntity<ErrorMessage<String>> handleNormalException(Exception e) {
-
-		ErrorMessage errorMessage = ErrorMessage.builder()
-			.statusCode(HttpStatus.BAD_REQUEST.value())
-			.message(e.getMessage())
-			.build();
-		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-	}
-	
-	@ExceptionHandler(ContentNotFoundException.class)
-	public ResponseEntity<ErrorMessage<String>> handleContentNotFoundException(ContentNotFoundException e) {
-		
-		ErrorMessage errorMessage = ErrorMessage.builder()
-			.statusCode(HttpStatus.NOT_FOUND.value())
-			.message(e.getMessage())
-			.build();
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
-	}
-	
 }
