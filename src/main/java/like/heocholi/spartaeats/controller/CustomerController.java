@@ -26,9 +26,11 @@ public class CustomerController {
     @Autowired
     private final CustomerService customerService;
 
-    // 회원가입 API
-    // request 회원가입 요청 DTO (SignupRequestDto)
-    // ResponseEntity<String> 회원가입 결과 메시지
+    /**
+     * 회원가입 API
+     * @param requestDto 회원가입 내용
+     * @return 회원가입 정보, 응답 상태, 메시지
+     */
     @PostMapping
     public ResponseEntity<ResponseMessage<SignupResponseDto>> signup(@RequestBody @Valid SignupRequestDto requestDto){
         SignupResponseDto responseDto = customerService.signup(requestDto);
@@ -42,6 +44,11 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
+    /**
+     * 로그아웃 API
+     * @param userDetails 유저 정보
+     * @return 회원Id, 응답 상태, 메시지
+     */
     @PutMapping("/logout")
     public ResponseEntity<ResponseMessage<String>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
         String userId = customerService.logout(userDetails.getUsername());
@@ -55,6 +62,12 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    /**
+     * 회원 탈퇴 API
+     * @param requestDto 회원탈퇴 내용(비밀번호)
+     * @param userDetails 회원 정보
+     * @return 회원Id, 응답상태, 메시지
+     */
     @PutMapping("/withdraw")
     public ResponseEntity<ResponseMessage<String>> withdrawCustomer(@RequestBody WithdrawRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userId = userDetails.getUsername();
