@@ -8,9 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CartRequestDTO {
-	@NotNull(message = "가게 아이디를 입력해주세요.")
-	private Long storeId;
-	
 	@NotNull(message = "메뉴 아이디를 입력해주세요.")
 	private Long menuId;
 	

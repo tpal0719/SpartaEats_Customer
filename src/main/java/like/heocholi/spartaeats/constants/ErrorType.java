@@ -50,9 +50,9 @@ public enum ErrorType {
 
     //review
     NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다.")
-
-
-    ;
+      
+    //store
+    NOT_FOUND_STORES(HttpStatus.NOT_FOUND,"음식점이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;

@@ -44,7 +44,7 @@ public class OrderService {
 		}
 		
 		Store store = cartList.get(0).getStore();
-		int totalPrice = cartList.stream().mapToInt(cart -> cart.getMenu().getPrice()).sum();
+		int totalPrice = cartList.stream().mapToInt(cart -> cart.getMenu().getPrice() * cart.getQuantity()).sum();
 		
 		Order order = new Order(store, customer);
 		Order saveOrder = orderRepository.save(order);
