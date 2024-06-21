@@ -8,9 +8,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "reviews")
+@Getter
+@Setter
 public class Review extends Timestamped{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +35,8 @@ public class Review extends Timestamped{
 	private String contents;
 	
 	private int likeCount;
+
+	public void updateLike(int likeCount) {
+		this.likeCount = likeCount;
+	}
 }

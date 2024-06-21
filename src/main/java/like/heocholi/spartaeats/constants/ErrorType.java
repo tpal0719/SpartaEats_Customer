@@ -43,7 +43,16 @@ public enum ErrorType {
     NOT_FOUND_MENU(HttpStatus.NOT_FOUND,"해당 메뉴가 존재하지 않습니다."),
 
     //password
-    RECENTLY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "최근 3번 안에 사용한 비밀번호로는 변경할 수 없습니다.");
+    RECENTLY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "최근 3번 안에 사용한 비밀번호로는 변경할 수 없습니다."),
+
+    //like
+    INVALID_LIKE(HttpStatus.BAD_REQUEST, "본인이 작성한 리뷰에는 좋아요를 할 수 없습니다."),
+
+    //review
+    NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다.")
+
+
+    ;
 
     private final HttpStatus httpStatus;
     private final String message;
