@@ -30,31 +30,33 @@ public class CustomerController {
     // request 회원가입 요청 DTO (SignupRequestDto)
     // ResponseEntity<String> 회원가입 결과 메시지
     @PostMapping
-    public ResponseEntity<?> signup(@RequestBody @Valid SignupRequestDto requestDto){
+    public ResponseEntity<ResponseMessage<SignupResponseDto>> signup(@RequestBody @Valid SignupRequestDto requestDto){
         SignupResponseDto responseDto = customerService.signup(requestDto);
+
         ResponseMessage<SignupResponseDto> responseMessage = ResponseMessage.<SignupResponseDto>builder()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .message("회원가입 성공")
                 .data(responseDto)
                 .build();
 
-        return ResponseEntity.ok().body(responseMessage);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
     @PutMapping("/logout")
-    public ResponseEntity<?> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<ResponseMessage<String>> logout(@AuthenticationPrincipal UserDetailsImpl userDetails){
         String userId = customerService.logout(userDetails.getUsername());
+
         ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
                 .statusCode(HttpStatus.OK.value())
                 .message("로그아웃 성공")
                 .data(userId)
                 .build();
 
-        return ResponseEntity.ok().body(responseMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
     @PutMapping("/withdraw")
-    public ResponseEntity<?> withdrawCustomer(@RequestBody WithdrawRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<String>> withdrawCustomer(@RequestBody WithdrawRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         String userId = userDetails.getUsername();
         String withdrawnUserId = customerService.withdrawCustomer(requestDto, userId);
 
@@ -64,7 +66,7 @@ public class CustomerController {
                 .data(withdrawnUserId)
                 .build();
 
-        return ResponseEntity.ok().body(responseMessage);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
     @GetMapping
