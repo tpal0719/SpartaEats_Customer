@@ -55,12 +55,13 @@ public class CartController {
 	
 	// 장바구니 전체 삭제
 	@DeleteMapping
-	public ResponseEntity<ResponseMessage<String>> deleteAllCart(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		cartService.deleteAllCart(userDetails.getCustomer());
+	public ResponseEntity<ResponseMessage<Long>> deleteAllCart(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		Long customerId = cartService.deleteAllCart(userDetails.getCustomer());
 		
-		ResponseMessage<String> responseMessage = ResponseMessage.<String>builder()
+		ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
 			.statusCode(HttpStatus.OK.value())
 			.message("장바구니가 비워졌습니다.")
+			.data(customerId)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);

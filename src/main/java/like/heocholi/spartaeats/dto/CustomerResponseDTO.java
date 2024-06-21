@@ -4,14 +4,16 @@ import like.heocholi.spartaeats.entity.Customer;
 import lombok.Getter;
 
 @Getter
-public class SignupResponseDto {
-    private String userId;
+public class CustomerResponseDTO {
+    private String customerId;
     private String name;
     private String address;
+    private String bio;
 
-    public SignupResponseDto(Customer customer) {
-        this.userId = customer.getUserId();
+    public CustomerResponseDTO(Customer customer) {
+        this.customerId = customer.getUserId();
         this.name = customer.getName();
         this.address = customer.getAddress();
+        this.bio = customer.getBio();
     }
 }
