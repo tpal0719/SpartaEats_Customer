@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(e.getErrorType().getHttpStatus()).body(errorMessage);
 	}
 
-	@ExceptionHandler({OrderException.class, PasswordException.class})
+	@ExceptionHandler(PasswordException.class)
 	public ResponseEntity<ErrorMessage<String>> handleNormalException(Exception e) {
 
 		ErrorMessage errorMessage = ErrorMessage.builder()

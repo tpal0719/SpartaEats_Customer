@@ -27,12 +27,12 @@ public class OrderController {
 	// 주문 추가
 	@PostMapping
 	public ResponseEntity<ResponseMessage<OrderResponseDTO>> addOrder(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-		OrderResponseDTO orderResponseDTO = orderService.saveOrder(userDetails.getCustomer());
+		OrderResponseDTO responseDTO = orderService.saveOrder(userDetails.getCustomer());
 		
 		ResponseMessage<OrderResponseDTO> responseMessage = ResponseMessage.<OrderResponseDTO>builder()
 			.statusCode(HttpStatus.CREATED.value())
 			.message("주문이 완료되었습니다.")
-			.data(orderResponseDTO)
+			.data(responseDTO)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
@@ -44,12 +44,12 @@ public class OrderController {
 		@RequestParam(value = "page", required = false, defaultValue = "1") Integer page,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		
-		OrderListResponseDTO orderResponseDTOList = orderService.getOrders(page, userDetails.getCustomer());
+		OrderListResponseDTO responseDTO = orderService.getOrders(page, userDetails.getCustomer());
 		
 		ResponseMessage<OrderListResponseDTO> responseMessage = ResponseMessage.<OrderListResponseDTO>builder()
 			.statusCode(HttpStatus.OK.value())
 			.message("주문 목록을 불러왔습니다.")
-			.data(orderResponseDTOList)
+			.data(responseDTO)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -60,12 +60,12 @@ public class OrderController {
 	public ResponseEntity<ResponseMessage<OrderResponseDTO>> getOrderDetail(@PathVariable Long id,
 		@AuthenticationPrincipal UserDetailsImpl userDetails) {
 		
-		OrderResponseDTO orderResponseDTO = orderService.getOrderDetails(id, userDetails.getCustomer());
+		OrderResponseDTO responseDTO = orderService.getOrderDetails(id, userDetails.getCustomer());
 		
 		ResponseMessage<OrderResponseDTO> responseMessage = ResponseMessage.<OrderResponseDTO>builder()
 			.statusCode(HttpStatus.OK.value())
 			.message("주문 상세 정보를 불러왔습니다.")
-			.data(orderResponseDTO)
+			.data(responseDTO)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
@@ -73,13 +73,14 @@ public class OrderController {
 	
 	// 주문 취소하기
 	@PutMapping("/{id}")
-	public ResponseEntity<ResponseMessage<Long>> cancelOrder(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-		Long orderId = orderService.cancelOrder(id, userDetails.getCustomer());
+	public ResponseEntity<ResponseMessage<Long>> cancelOrder(@PathVariable Long id,
+		@AuthenticationPrincipal UserDetailsImpl userDetails) {
+		Long responseId = orderService.cancelOrder(id, userDetails.getCustomer());
 		
 		ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
 			.statusCode(HttpStatus.OK.value())
 			.message("주문이 취소되었습니다.")
-			.data(orderId)
+			.data(responseId)
 			.build();
 		
 		return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
