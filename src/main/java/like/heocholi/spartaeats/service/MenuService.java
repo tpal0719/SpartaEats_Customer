@@ -1,5 +1,6 @@
 package like.heocholi.spartaeats.service;
 
+import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.dto.MenuResponseDto;
 import like.heocholi.spartaeats.entity.Menu;
 import like.heocholi.spartaeats.entity.Store;
@@ -22,7 +23,7 @@ public class MenuService {
 
     public MenuResponseDto getMenu(Long storeId, Long menuId) {
         Store store = findStoreById(storeId);
-        Menu menu = menuRepository.findByStoreIdAndId(storeId,menuId).orElseThrow(() -> new MenuException("["+ store.getName()+"]에 해당 메뉴가 존재하지 않습니다."));
+        Menu menu = menuRepository.findByStoreIdAndId(storeId,menuId).orElseThrow(() -> new MenuException(ErrorType.NOT_FOUND_MENU));
 
         return new MenuResponseDto(menu);
     }
@@ -32,7 +33,7 @@ public class MenuService {
         List<MenuResponseDto> menuList = menuRepository.findAllByStoreId(storeId).stream().map(MenuResponseDto::new).toList();
 
         if(menuList.isEmpty()){
-            throw new MenuException("["+ store.getName()+"]에 메뉴가 없습니다.");
+            throw new MenuException(ErrorType.NOT_FOUND_MENUS);
         }
 
        return menuList;
@@ -42,7 +43,7 @@ public class MenuService {
 
 
     public Store findStoreById(Long storeId) {
-        Store store =storeRepository.findById(storeId).orElseThrow(() -> new IllegalArgumentException("선택한 음식점이 존재하지 않습니다."));
+        Store store =storeRepository.findById(storeId).orElseThrow(() -> new MenuException(ErrorType.NOT_FOUND_STORE));
 
         return store;
     }
