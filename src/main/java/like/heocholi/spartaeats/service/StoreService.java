@@ -4,7 +4,7 @@ import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.dto.StorePageResponseDto;
 import like.heocholi.spartaeats.dto.StoreResponseDto;
 import like.heocholi.spartaeats.entity.Store;
-import like.heocholi.spartaeats.exception.ContentNotFoundException;
+import like.heocholi.spartaeats.exception.PageException;
 import like.heocholi.spartaeats.exception.StoreException;
 import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +41,11 @@ public class StoreService {
 
     private static void checkValidatePage(Integer page, Page<Store> storePageList) {
         if (storePageList.getTotalElements() == 0) {
-            throw new ContentNotFoundException("가게가 존재하지 않습니다.");
+            throw new StoreException(ErrorType.NOT_FOUND_STORES);
         }
 
         if (page > storePageList.getTotalPages() || page < 1) {
-            throw new ContentNotFoundException("페이지가 존재하지 않습니다.");
+            throw new PageException(ErrorType.INVALID_PAGE);
         }
     }
 }
