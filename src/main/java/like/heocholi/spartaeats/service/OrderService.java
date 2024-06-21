@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.dto.OrderListResponseDTO;
 import like.heocholi.spartaeats.dto.OrderResponseDTO;
 import like.heocholi.spartaeats.entity.Cart;
@@ -18,6 +19,7 @@ import like.heocholi.spartaeats.entity.OrderMenu;
 import like.heocholi.spartaeats.entity.Store;
 import like.heocholi.spartaeats.exception.ContentNotFoundException;
 import like.heocholi.spartaeats.exception.OrderException;
+import like.heocholi.spartaeats.exception.PageException;
 import like.heocholi.spartaeats.repository.OrderMenuRepository;
 import like.heocholi.spartaeats.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +44,7 @@ public class OrderService {
 		}
 		
 		Store store = cartList.get(0).getStore();
-		int totalPrice = cartList.stream().mapToInt(cart -> cart.getMenu().getPrice()).sum();
+		int totalPrice = cartList.stream().mapToInt(cart -> cart.getMenu().getPrice() * cart.getQuantity()).sum();
 		
 		Order order = new Order(store, customer);
 		Order saveOrder = orderRepository.save(order);
@@ -105,7 +107,7 @@ public class OrderService {
 	 * 주문 내역 조회
 	 */
 	private Order getOrder(Long orderId) {
-		return orderRepository.findById(orderId).orElseThrow(() -> new ContentNotFoundException("주문 내역이 존재하지 않습니다."));
+		return orderRepository.findById(orderId).orElseThrow(() -> new OrderException(ErrorType.NOT_FOUND_ORDER));
 	}
 	
 	/*
@@ -113,7 +115,7 @@ public class OrderService {
 	 */
 	private void checkValidateUser(Order order, Customer customer) {
 		if (!order.getCustomer().getId().equals(customer.getId())) {
-			throw new OrderException("본인의 주문 내역이 아닙니다.");
+			throw new OrderException(ErrorType.INVALID_ORDER_CUSTOMER);
 		}
 	}
 	
@@ -129,11 +131,11 @@ public class OrderService {
 	 */
 	private static void checkValidatePage(Integer page, Page<Order> orderPage) {
 		if (orderPage.getTotalElements() == 0) {
-			throw new ContentNotFoundException("주문 내역이 없습니다.");
+			throw new OrderException(ErrorType.NOT_FOUND_ORDER);
 		}
 		
 		if (page > orderPage.getTotalPages() || page < 1) {
-			throw new ContentNotFoundException("페이지가 존재하지 않습니다.");
+			throw new PageException(ErrorType.INVALID_PAGE);
 		}
 	}
 }
