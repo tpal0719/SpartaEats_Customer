@@ -1,5 +1,6 @@
 package like.heocholi.spartaeats.controller;
 
+import like.heocholi.spartaeats.constants.RestaurantType;
 import like.heocholi.spartaeats.dto.*;
 import like.heocholi.spartaeats.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,11 @@ public class StoreController {
 
     //음식점 리스트 보기
     //주문이 많은 순서대로
-    @GetMapping
+    @GetMapping("/type/{type}")
     public ResponseEntity<ResponseMessage<StorePageResponseDto>> getStorePage (
+            @PathVariable RestaurantType type,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
-        StorePageResponseDto storePageResponseDto = storeService.getStorePage(page);
+        StorePageResponseDto storePageResponseDto = storeService.getStorePageByType(type, page);
 
         ResponseMessage<StorePageResponseDto> responseMessage = ResponseMessage.<StorePageResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
