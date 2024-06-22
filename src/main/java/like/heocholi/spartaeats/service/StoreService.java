@@ -31,13 +31,26 @@ public class StoreService {
     }
 
     // 가게 전체 조회
-    public StorePageResponseDto getStorePageByType(RestaurantType type, Integer page) {
+    public StorePageResponseDto getStorePageByType(String type, Integer page) {
+        RestaurantType restaurantType = checkValidateType(type);
         Pageable pageable = PageRequest.of(page - 1, 5);
-        Page<Store> storePageList = storeRepository.findByTypeGroupedByStoreOrderByOrderCountDesc(type, pageable);
+
+        Page<Store> storePageList = storeRepository.findByTypeGroupedByStoreOrderByOrderCountDesc(restaurantType, pageable);
 
         checkValidatePage(page, storePageList);
 
         return new StorePageResponseDto(page, storePageList);
+    }
+
+    private RestaurantType checkValidateType(String type) {
+        RestaurantType restaurantType;
+        try {
+            restaurantType = RestaurantType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new StoreException(ErrorType.INVALID_TYPE);
+        }
+
+        return restaurantType;
     }
 
     // 페이지 유효성 검사

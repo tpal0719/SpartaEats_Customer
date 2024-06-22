@@ -33,7 +33,7 @@ public class StoreController {
     //주문이 많은 순서대로
     @GetMapping("/type/{type}")
     public ResponseEntity<ResponseMessage<StorePageResponseDto>> getStorePage (
-            @PathVariable RestaurantType type,
+            @PathVariable String type,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
         StorePageResponseDto storePageResponseDto = storeService.getStorePageByType(type, page);
 
