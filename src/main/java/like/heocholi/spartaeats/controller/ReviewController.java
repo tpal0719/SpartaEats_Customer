@@ -46,6 +46,13 @@ public class ReviewController {
 
         ReviewResponseDto responseDto = reviewService.addReview(orderId,requestDto,userDetails.getCustomer());
 
+        ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("리뷰가 등록되었습니다.")
+                .data(responseDto)
+                .build();
+
+
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
