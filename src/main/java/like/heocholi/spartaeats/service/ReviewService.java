@@ -56,8 +56,18 @@ public class ReviewService {
         return new ReviewResponseDto(review);
     }
 
-    public ReviewResponseDto updateReview(Long reviewId, Customer customer) {
-        return null;
+    public ReviewResponseDto updateReview(Long reviewId,ReviewUpdateRequestDto requestDto, Customer customer) {
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
+        );
+        if(!customer.equals(review.getCustomer())) {
+            throw new ReviewException(ErrorType.INVALID_ORDER_CUSTOMER);
+        }
+
+        review.update(requestDto.getContents());
+
+        return new ReviewResponseDto(review);
     }
 
     public ReviewResponseDto deleteReview(Long reviewId, Customer customer) {

@@ -47,4 +47,8 @@ public class Review extends Timestamped{
 		this.contents = contents;
 		likeCount = 0;
 	}
+
+	public void update(String contents){
+		this.contents = contents;
+	}
 }
