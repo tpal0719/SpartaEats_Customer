@@ -10,6 +10,7 @@ import like.heocholi.spartaeats.exception.ReviewException;
 import like.heocholi.spartaeats.repository.OrderMenuRepository;
 import like.heocholi.spartaeats.repository.OrderRepository;
 import like.heocholi.spartaeats.repository.ReviewRepository;
+import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,15 +22,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
 
+    private final StoreRepository storeRepository;
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
 
     public List<ReviewResponseDto> getReviews(Long storeId, Customer customer) {
-        return null;
+
+        Store store = storeRepository.findById(storeId).orElseThrow(
+                ()-> new ReviewException(ErrorType.NOT_FOUND_STORE)
+        );
+        List<ReviewResponseDto> reviewList = store.getReviews().stream().map(ReviewResponseDto::new).toList();
+
+        return reviewList;
     }
 
     public ReviewResponseDto getReview(Long storeId, Long reviewId, Customer customer) {
-        return null;
+
+        Review review = reviewRepository.findByStoreIdAndId(storeId, reviewId).orElseThrow(
+                ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
+        );
+
+        return new ReviewResponseDto(review);
     }
 
 
