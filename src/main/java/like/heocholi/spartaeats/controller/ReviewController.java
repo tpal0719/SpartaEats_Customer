@@ -23,7 +23,7 @@ public class ReviewController {
     public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(@PathVariable Long storeId,
                                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        List<ReviewResponseDto> reviewList = reviewService.getReviews(storeId, userDetails.getCustomer());
+        //List<ReviewResponseDto> reviewList = reviewService.getReviews(storeId, userDetails.getCustomer());
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -33,17 +33,18 @@ public class ReviewController {
                                                                               @PathVariable Long reviewId,
                                                                               @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        ReviewResponseDto requestDto = reviewService.getReview(storeId,reviewId,userDetails.getCustomer());
+        //ReviewResponseDto requestDto = reviewService.getReview(storeId,reviewId,userDetails.getCustomer());
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
     //리뷰 등록
     @PostMapping("/orders/{orderId}/reviews")
-    public ResponseEntity<ResponseMessage<ReviewAddRequestDto>> addReview(@PathVariable Long orderId,
+    public ResponseEntity<ResponseMessage<ReviewResponseDto>> addReview(@PathVariable Long orderId,
+                                                                          @RequestBody ReviewAddRequestDto requestDto,
                                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        ReviewAddRequestDto requestDto = reviewService.addReview(orderId,userDetails.getCustomer());
+        ReviewResponseDto responseDto = reviewService.addReview(orderId,requestDto,userDetails.getCustomer());
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -53,7 +54,7 @@ public class ReviewController {
     public ResponseEntity<ResponseMessage<ReviewUpdateRequestDto>> updateReview(@PathVariable Long reviewId,
                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        ReviewUpdateRequestDto requestDto = reviewService.updateReview(reviewId,userDetails.getCustomer());
+        //ReviewUpdateRequestDto requestDto = reviewService.updateReview(reviewId,userDetails.getCustomer());
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
@@ -64,7 +65,7 @@ public class ReviewController {
     public ResponseEntity<ResponseMessage<ReviewResponseDto>> deleteReview(@PathVariable Long reviewId,
                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        ReviewResponseDto requestDto = reviewService.deleteReview(reviewId,userDetails.getCustomer());
+        //ReviewResponseDto requestDto = reviewService.deleteReview(reviewId,userDetails.getCustomer());
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
