@@ -31,9 +31,9 @@ public class StoreController {
 
     //음식점 리스트 보기
     //주문이 많은 순서대로
-    @GetMapping("/type/{type}")
+    @GetMapping
     public ResponseEntity<ResponseMessage<StorePageResponseDto>> getStorePage (
-            @PathVariable String type,
+            @RequestParam String type,
             @RequestParam(value = "page", required = false, defaultValue = "1") Integer page) {
         StorePageResponseDto storePageResponseDto = storeService.getStorePageByType(type, page);
 
