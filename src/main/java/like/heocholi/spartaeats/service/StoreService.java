@@ -22,13 +22,14 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
+    // 가게 상세 조회
     public StoreResponseDto readStore(Long storeId) {
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreException(ErrorType.NOT_FOUND_STORE));
 
         return new StoreResponseDto(store);
     }
 
-
+    // 가게 전체 조회
     public StorePageResponseDto getStorePage(Integer page) {
         Pageable pageable = PageRequest.of(page-1, 5);
         Page<Store> storePageList = storeRepository.findAllGroupedByStoreOrderByOrderCountDesc(pageable);
@@ -39,6 +40,7 @@ public class StoreService {
 
     }
 
+    // 페이지 유효성 검사
     private static void checkValidatePage(Integer page, Page<Store> storePageList) {
         if (storePageList.getTotalElements() == 0) {
             throw new StoreException(ErrorType.NOT_FOUND_STORES);

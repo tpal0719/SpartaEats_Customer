@@ -21,6 +21,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
+    // 메뉴 상세 조회
     public MenuResponseDto getMenu(Long storeId, Long menuId) {
         Store store = findStoreById(storeId);
         Menu menu = menuRepository.findByStoreIdAndId(storeId,menuId).orElseThrow(() -> new MenuException(ErrorType.NOT_FOUND_MENU));
@@ -28,6 +29,7 @@ public class MenuService {
         return new MenuResponseDto(menu);
     }
 
+    // 메뉴 전체 조회
     public List<MenuResponseDto> getMenus(Long storeId) {
         Store store = findStoreById(storeId);
         List<MenuResponseDto> menuList = menuRepository.findAllByStoreId(storeId).stream().map(MenuResponseDto::new).toList();
@@ -38,10 +40,8 @@ public class MenuService {
 
        return menuList;
     }
-
-
-
-
+    
+    // 가게 조회
     public Store findStoreById(Long storeId) {
         Store store =storeRepository.findById(storeId).orElseThrow(() -> new MenuException(ErrorType.NOT_FOUND_STORE));
 

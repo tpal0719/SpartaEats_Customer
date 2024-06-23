@@ -49,6 +49,37 @@ public class CustomerService {
 
         return new SignupResponseDto(customer);
     }
+    
+    //로그아웃
+    @Transactional
+    public String logout(String userId) {
+        // 유저 확인
+        Customer customer = this.findByUserId(userId);
+        
+        customer.removeRefreshToken();
+        
+        return customer.getUserId();
+    }
+    
+    //회원 탈퇴
+    @Transactional
+    public String withdrawCustomer(WithdrawRequestDto requestDto, String userId) {
+        // 유저 확인
+        Customer customer = this.findByUserId(userId);
+        // 이미 탈퇴한 회원인지 확인
+        if(customer.getUserStatus().equals(UserStatus.DEACTIVATE)){
+            throw new CustomerException(ErrorType.DEACTIVATE_USER);
+        }
+        // 비밀번호 확인
+        if(!passwordEncoder.matches(requestDto.getPassword(), customer.getPassword())){
+            throw new CustomerException(ErrorType.INVALID_PASSWORD);
+        }
+        
+        customer.withdrawCustomer();
+        
+        return customer.getUserId();
+    }
+    
 
     //유저 정보 조회
     public CustomerResponseDTO getCustomerInfo(Customer customer) {
@@ -92,16 +123,6 @@ public class CustomerService {
         return customer.getUserId();
     }
 
-    @Transactional
-    public String logout(String userId) {
-        // 유저 확인
-        Customer customer = this.findByUserId(userId);
-
-        customer.removeRefreshToken();
-
-        return customer.getUserId();
-    }
-
     //프로필 업데이트 메서드
     // customerId 사용자 ID
     // request 프로필 업데이트 요청 DTO (ProfileRequest)
@@ -123,24 +144,6 @@ public class CustomerService {
                 .build();
 
         passwordHistoryRepository.save(passwordHistory);
-    }
-
-    @Transactional
-    public String withdrawCustomer(WithdrawRequestDto requestDto, String userId) {
-        // 유저 확인
-        Customer customer = this.findByUserId(userId);
-        // 이미 탈퇴한 회원인지 확인
-        if(customer.getUserStatus().equals(UserStatus.DEACTIVATE)){
-            throw new CustomerException(ErrorType.DEACTIVATE_USER);
-        }
-        // 비밀번호 확인
-        if(!passwordEncoder.matches(requestDto.getPassword(), customer.getPassword())){
-            throw new CustomerException(ErrorType.INVALID_PASSWORD);
-        }
-
-        customer.withdrawCustomer();
-
-        return customer.getUserId();
     }
 
     private Customer findByUserId(String userId){

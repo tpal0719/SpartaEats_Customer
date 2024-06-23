@@ -1,6 +1,5 @@
 package like.heocholi.spartaeats.entity;
 
-import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,10 +13,6 @@ import like.heocholi.spartaeats.dto.ProfileRequestDTO;
 import like.heocholi.spartaeats.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

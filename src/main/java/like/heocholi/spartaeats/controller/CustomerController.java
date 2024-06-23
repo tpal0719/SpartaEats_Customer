@@ -75,6 +75,8 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
+    
+    // 프로필 조회 API
     @GetMapping
     public ResponseEntity<ResponseMessage<CustomerResponseDTO>> getCustomerInfo (@AuthenticationPrincipal UserDetailsImpl userDetails) {
         CustomerResponseDTO responseDTO =  customerService.getCustomerInfo(userDetails.getCustomer());
