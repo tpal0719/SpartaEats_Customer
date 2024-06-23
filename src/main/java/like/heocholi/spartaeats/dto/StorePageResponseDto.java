@@ -13,13 +13,13 @@ public class StorePageResponseDto {
     private Long totalElements;
     private Integer totalPages;
     private Integer size;
-    private List<StoreResponseDto> storeList;
+    private List<StoreListResponseDto> storeList;
 
     public StorePageResponseDto(Integer currentPage, Page<Store> storePageList) {
         this.currentPage = currentPage;
         this.totalElements = storePageList.getTotalElements();
         this.totalPages = storePageList.getTotalPages();
         this.size = storePageList.getSize();
-        this.storeList = storePageList.getContent().stream().map(StoreResponseDto::new).toList();
+        this.storeList = storePageList.getContent().stream().map(StoreListResponseDto::new).toList();
     }
 }

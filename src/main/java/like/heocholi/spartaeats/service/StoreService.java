@@ -1,6 +1,7 @@
 package like.heocholi.spartaeats.service;
 
 import like.heocholi.spartaeats.constants.ErrorType;
+import like.heocholi.spartaeats.constants.RestaurantType;
 import like.heocholi.spartaeats.dto.StorePageResponseDto;
 import like.heocholi.spartaeats.dto.StoreResponseDto;
 import like.heocholi.spartaeats.entity.Store;
@@ -30,14 +31,26 @@ public class StoreService {
     }
 
     // 가게 전체 조회
-    public StorePageResponseDto getStorePage(Integer page) {
-        Pageable pageable = PageRequest.of(page-1, 5);
-        Page<Store> storePageList = storeRepository.findAllGroupedByStoreOrderByOrderCountDesc(pageable);
+    public StorePageResponseDto getStorePageByType(String type, Integer page) {
+        RestaurantType restaurantType = checkValidateType(type);
+        Pageable pageable = PageRequest.of(page - 1, 5);
+
+        Page<Store> storePageList = storeRepository.findByTypeGroupedByStoreOrderByOrderCountDesc(restaurantType, pageable);
 
         checkValidatePage(page, storePageList);
 
         return new StorePageResponseDto(page, storePageList);
+    }
 
+    private RestaurantType checkValidateType(String type) {
+        RestaurantType restaurantType;
+        try {
+            restaurantType = RestaurantType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new StoreException(ErrorType.INVALID_TYPE);
+        }
+
+        return restaurantType;
     }
 
     // 페이지 유효성 검사
