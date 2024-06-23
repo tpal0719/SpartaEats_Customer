@@ -26,7 +26,7 @@ public class ReviewService {
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
 
-    public List<ReviewResponseDto> getReviews(Long storeId, Customer customer) {
+    public List<ReviewResponseDto> getReviews(Long storeId) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
                 ()-> new ReviewException(ErrorType.NOT_FOUND_STORE)
@@ -36,7 +36,7 @@ public class ReviewService {
         return reviewList;
     }
 
-    public ReviewResponseDto getReview(Long storeId, Long reviewId, Customer customer) {
+    public ReviewResponseDto getReview(Long storeId, Long reviewId) {
 
         Review review = reviewRepository.findByStoreIdAndId(storeId, reviewId).orElseThrow(
                 ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)

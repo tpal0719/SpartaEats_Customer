@@ -20,22 +20,32 @@ public class ReviewController {
 
     //리뷰 조회
     @GetMapping("/stores/{storeId}/reviews")
-    public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(@PathVariable Long storeId,
-                                                                             @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(@PathVariable Long storeId) {
 
-        //List<ReviewResponseDto> reviewList = reviewService.getReviews(storeId, userDetails.getCustomer());
+        List<ReviewResponseDto> reviewList = reviewService.getReviews(storeId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ResponseMessage<List<ReviewResponseDto>> responseMessage = ResponseMessage.<List<ReviewResponseDto>>builder()
+                .statusCode(HttpStatus.CREATED.value())
+                .message("모든 리뷰가 조회되었습니다.")
+                .data(reviewList)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
     @GetMapping("/stores/{storeId}/reviews/{reviewId}")
-    public ResponseEntity<ResponseMessage<List<ReviewResponseDto>>> getReview(@PathVariable Long storeId,
-                                                                              @PathVariable Long reviewId,
-                                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ResponseMessage<ReviewResponseDto>> getReview(@PathVariable Long storeId,
+                                                                              @PathVariable Long reviewId) {
 
-        //ReviewResponseDto requestDto = reviewService.getReview(storeId,reviewId,userDetails.getCustomer());
+        ReviewResponseDto responseDto = reviewService.getReview(storeId,reviewId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("해당 리뷰가 조회되었습니다.")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
     //리뷰 등록
@@ -47,34 +57,47 @@ public class ReviewController {
         ReviewResponseDto responseDto = reviewService.addReview(orderId,requestDto,userDetails.getCustomer());
 
         ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
-                .statusCode(HttpStatus.OK.value())
+                .statusCode(HttpStatus.CREATED.value())
                 .message("리뷰가 등록되었습니다.")
                 .data(responseDto)
                 .build();
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
     //리뷰 수정
     @PutMapping("/reviews/{reviewId}")
-    public ResponseEntity<ResponseMessage<ReviewUpdateRequestDto>> updateReview(@PathVariable Long reviewId,
+    public ResponseEntity<ResponseMessage<ReviewResponseDto>> updateReview(@PathVariable Long reviewId,
+                                                                                @RequestBody ReviewUpdateRequestDto requestDto,
                                                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        //ReviewUpdateRequestDto requestDto = reviewService.updateReview(reviewId,userDetails.getCustomer());
+        ReviewResponseDto responseDto = reviewService.updateReview(reviewId,requestDto,userDetails.getCustomer());
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("리뷰가 수정 되었습니다.")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
 
     //리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
-    public ResponseEntity<ResponseMessage<ReviewResponseDto>> deleteReview(@PathVariable Long reviewId,
+    public ResponseEntity<ResponseMessage<Long>> deleteReview(@PathVariable Long reviewId,
                                                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        //ReviewResponseDto requestDto = reviewService.deleteReview(reviewId,userDetails.getCustomer());
+        Long deleteId = reviewService.deleteReview(reviewId,userDetails.getCustomer());
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("리뷰가 삭제 되었습니다.")
+                .data(deleteId)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
     }
 
 
