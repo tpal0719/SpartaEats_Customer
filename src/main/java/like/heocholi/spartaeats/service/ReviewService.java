@@ -70,7 +70,16 @@ public class ReviewService {
         return new ReviewResponseDto(review);
     }
 
-    public ReviewResponseDto deleteReview(Long reviewId, Customer customer) {
-        return null;
+    public Long deleteReview(Long reviewId, Customer customer) {
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
+        );
+        if(!customer.equals(review.getCustomer())) {
+            throw new ReviewException(ErrorType.INVALID_ORDER_CUSTOMER);
+        }
+        reviewRepository.delete(review);
+
+        return review.getId();
     }
 }
