@@ -1,8 +1,11 @@
 package like.heocholi.spartaeats.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
 public class ReviewUpdateRequestDto {
-    String contents;
+
+    @NotBlank(message = "내용을 입력해주세요")
+    private String contents;
 }

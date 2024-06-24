@@ -1,5 +1,6 @@
 package like.heocholi.spartaeats.controller;
 
+import jakarta.validation.Valid;
 import like.heocholi.spartaeats.dto.*;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.service.ReviewService;
@@ -35,9 +36,9 @@ public class ReviewController {
 
     @GetMapping("/stores/{storeId}/reviews/{reviewId}")
     public ResponseEntity<ResponseMessage<ReviewResponseDto>> getReview(@PathVariable Long storeId,
-                                                                              @PathVariable Long reviewId) {
+                                                                        @PathVariable Long reviewId) {
 
-        ReviewResponseDto responseDto = reviewService.getReview(storeId,reviewId);
+        ReviewResponseDto responseDto = reviewService.getReview(storeId, reviewId);
 
         ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -51,10 +52,10 @@ public class ReviewController {
     //리뷰 등록
     @PostMapping("/orders/{orderId}/reviews")
     public ResponseEntity<ResponseMessage<ReviewResponseDto>> addReview(@PathVariable Long orderId,
-                                                                          @RequestBody ReviewAddRequestDto requestDto,
-                                                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                                        @RequestBody @Valid ReviewAddRequestDto requestDto,
+                                                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        ReviewResponseDto responseDto = reviewService.addReview(orderId,requestDto,userDetails.getCustomer());
+        ReviewResponseDto responseDto = reviewService.addReview(orderId, requestDto, userDetails.getCustomer());
 
         ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
                 .statusCode(HttpStatus.CREATED.value())
@@ -69,10 +70,10 @@ public class ReviewController {
     //리뷰 수정
     @PutMapping("/reviews/{reviewId}")
     public ResponseEntity<ResponseMessage<ReviewResponseDto>> updateReview(@PathVariable Long reviewId,
-                                                                                @RequestBody ReviewUpdateRequestDto requestDto,
-                                                                                @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                                           @RequestBody @Valid ReviewUpdateRequestDto requestDto,
+                                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        ReviewResponseDto responseDto = reviewService.updateReview(reviewId,requestDto,userDetails.getCustomer());
+        ReviewResponseDto responseDto = reviewService.updateReview(reviewId, requestDto, userDetails.getCustomer());
 
         ResponseMessage<ReviewResponseDto> responseMessage = ResponseMessage.<ReviewResponseDto>builder()
                 .statusCode(HttpStatus.OK.value())
@@ -87,9 +88,9 @@ public class ReviewController {
     //리뷰 삭제
     @DeleteMapping("/reviews/{reviewId}")
     public ResponseEntity<ResponseMessage<Long>> deleteReview(@PathVariable Long reviewId,
-                                                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        Long deleteId = reviewService.deleteReview(reviewId,userDetails.getCustomer());
+        Long deleteId = reviewService.deleteReview(reviewId, userDetails.getCustomer());
 
         ResponseMessage<Long> responseMessage = ResponseMessage.<Long>builder()
                 .statusCode(HttpStatus.OK.value())

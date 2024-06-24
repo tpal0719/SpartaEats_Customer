@@ -1,7 +1,9 @@
 package like.heocholi.spartaeats.dto;
 
 import like.heocholi.spartaeats.entity.Review;
+import lombok.Getter;
 
+@Getter
 public class ReviewResponseDto {
 
     private Long id;

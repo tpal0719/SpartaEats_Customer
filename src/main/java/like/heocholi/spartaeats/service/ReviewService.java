@@ -4,16 +4,18 @@ import like.heocholi.spartaeats.constants.ErrorType;
 import like.heocholi.spartaeats.dto.ReviewAddRequestDto;
 import like.heocholi.spartaeats.dto.ReviewResponseDto;
 import like.heocholi.spartaeats.dto.ReviewUpdateRequestDto;
-import like.heocholi.spartaeats.entity.*;
-import like.heocholi.spartaeats.exception.OrderException;
+import like.heocholi.spartaeats.entity.Customer;
+import like.heocholi.spartaeats.entity.Order;
+import like.heocholi.spartaeats.entity.Review;
+import like.heocholi.spartaeats.entity.Store;
 import like.heocholi.spartaeats.exception.ReviewException;
-import like.heocholi.spartaeats.repository.OrderMenuRepository;
 import like.heocholi.spartaeats.repository.OrderRepository;
 import like.heocholi.spartaeats.repository.ReviewRepository;
 import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -26,20 +28,22 @@ public class ReviewService {
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
 
+    // 리뷰조회
     public List<ReviewResponseDto> getReviews(Long storeId) {
 
         Store store = storeRepository.findById(storeId).orElseThrow(
-                ()-> new ReviewException(ErrorType.NOT_FOUND_STORE)
+                () -> new ReviewException(ErrorType.NOT_FOUND_STORE)
         );
         List<ReviewResponseDto> reviewList = store.getReviews().stream().map(ReviewResponseDto::new).toList();
 
         return reviewList;
     }
 
+    // 리뷰 단건조회
     public ReviewResponseDto getReview(Long storeId, Long reviewId) {
 
         Review review = reviewRepository.findByStoreIdAndId(storeId, reviewId).orElseThrow(
-                ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
+                () -> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
         );
 
         return new ReviewResponseDto(review);
@@ -47,13 +51,14 @@ public class ReviewService {
 
 
     // 리뷰 작성
-    public ReviewResponseDto addReview(Long orderId,ReviewAddRequestDto reviewAddRequestDto,Customer customer) {
+    @Transactional
+    public ReviewResponseDto addReview(Long orderId, ReviewAddRequestDto requestDto, Customer customer) {
 
         Order order = orderRepository.findById(orderId).orElseThrow(
-                ()->  new ReviewException(ErrorType.NOT_FOUND_ORDER)
+                () -> new ReviewException(ErrorType.NOT_FOUND_ORDER)
         );
 
-        if(!customer.equals(order.getCustomer())) {
+        if (!customer.getId().equals(order.getCustomer().getId())) {
             throw new ReviewException(ErrorType.INVALID_ORDER_CUSTOMER);
         }
 
@@ -61,7 +66,7 @@ public class ReviewService {
                 .order(order)
                 .store(order.getStore())
                 .customer(order.getCustomer())
-                .contents(reviewAddRequestDto.getContent())
+                .contents(requestDto.getContents())
                 .build();
 
         reviewRepository.save(review);
@@ -69,30 +74,41 @@ public class ReviewService {
         return new ReviewResponseDto(review);
     }
 
-    public ReviewResponseDto updateReview(Long reviewId,ReviewUpdateRequestDto requestDto, Customer customer) {
+    // 리뷰 수정
+    @Transactional
+    public ReviewResponseDto updateReview(Long reviewId, ReviewUpdateRequestDto requestDto, Customer customer) {
 
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
-        );
-        if(!customer.equals(review.getCustomer())) {
-            throw new ReviewException(ErrorType.INVALID_ORDER_CUSTOMER);
-        }
+        Review review = findReviewByIdAndCustomercheck(reviewId, customer);
 
         review.update(requestDto.getContents());
 
         return new ReviewResponseDto(review);
     }
 
+    // 리뷰 삭제
+    @Transactional
     public Long deleteReview(Long reviewId, Customer customer) {
 
-        Review review = reviewRepository.findById(reviewId).orElseThrow(
-                ()-> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
-        );
-        if(!customer.equals(review.getCustomer())) {
-            throw new ReviewException(ErrorType.INVALID_ORDER_CUSTOMER);
-        }
+        Review review = findReviewByIdAndCustomercheck(reviewId, customer);
+
         reviewRepository.delete(review);
 
         return review.getId();
+    }
+
+
+
+
+    /* Util */
+
+    public Review findReviewByIdAndCustomercheck(Long reviewId, Customer customer) {
+        Review review = reviewRepository.findById(reviewId).orElseThrow(
+                () -> new ReviewException(ErrorType.NOT_FOUND_REVIEW)
+        );
+        if (!customer.getId().equals(review.getCustomer().getId())) {
+            throw new ReviewException(ErrorType.INVALID_ORDER_CUSTOMER);
+        }
+
+        return review;
     }
 }
