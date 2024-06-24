@@ -54,8 +54,10 @@ public enum ErrorType {
       
     //store
     INVALID_TYPE(HttpStatus.BAD_REQUEST, "타입이 올바르지 않습니다."),
-    NOT_FOUND_STORES(HttpStatus.NOT_FOUND,"음식점이 존재하지 않습니다.");
+    NOT_FOUND_STORES(HttpStatus.NOT_FOUND,"음식점이 존재하지 않습니다."),
 
+    //pick
+    NOT_FOUND_PICK(HttpStatus.NOT_FOUND,"찜 목록이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
