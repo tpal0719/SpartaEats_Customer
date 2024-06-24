@@ -30,14 +30,14 @@ public class LikeService {
             throw new LikeException(ErrorType.INVALID_LIKE);
         }
 
-        boolean result = likeUpdate(customer, review);
+        boolean result = toggleLike(customer.getId(), review);
         review.updateLike(result);
 
         return result;
     }
 
-    private boolean likeUpdate(Customer customer, Review review) {
-        Optional<Like> optionalLike = likeRepository.findByCustomerAndReview(customer, review);
+    private boolean toggleLike(Long customerId, Review review) {
+        Optional<Like> optionalLike = likeRepository.findByCustomerIdAndReviewId(customerId, review.getId());
         Like like;
 
         if(optionalLike.isPresent()) {
@@ -45,7 +45,7 @@ public class LikeService {
             like.update();
         } else {
             like  = Like.builder()
-                    .customer(customer)
+                    .customer(review.getCustomer())
                     .review(review)
                     .isLike(true)
                     .build();
