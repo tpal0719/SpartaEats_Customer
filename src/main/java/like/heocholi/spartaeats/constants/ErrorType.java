@@ -48,6 +48,10 @@ public enum ErrorType {
     //password
     RECENTLY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "최근 3번 안에 사용한 비밀번호로는 변경할 수 없습니다."),
 
+    //like
+    INVALID_LIKE(HttpStatus.BAD_REQUEST, "본인이 작성한 리뷰에는 좋아요를 할 수 없습니다."),
+    
+      
     //store
     INVALID_TYPE(HttpStatus.BAD_REQUEST, "타입이 올바르지 않습니다."),
     NOT_FOUND_STORES(HttpStatus.NOT_FOUND,"음식점이 존재하지 않습니다.");
