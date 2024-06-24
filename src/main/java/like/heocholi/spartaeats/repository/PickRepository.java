@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PickRepository extends JpaRepository<Pick, Long> {
-    Page<Pick> findAllByCustomer(Customer customer, Pageable pageable);
-
     Pick findByStoreAndCustomer(Store store, Customer customer);
+
+    Page<Pick> findAllByCustomerAndIsPickTrue(Customer customer, Pageable pageable);
 }
