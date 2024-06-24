@@ -1,18 +1,14 @@
 package like.heocholi.spartaeats.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import like.heocholi.spartaeats.constants.UserRole;
 import like.heocholi.spartaeats.constants.UserStatus;
 import like.heocholi.spartaeats.dto.ProfileRequestDTO;
 import like.heocholi.spartaeats.dto.SignupRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +36,9 @@ public class Customer extends Timestamped {
 
 	@Enumerated(value = EnumType.STRING)
 	private UserRole role;
+
+	@OneToMany(mappedBy = "customer")
+	private List<Pick> pickList;
 
 	public Customer(SignupRequestDto requestDto, String encodedPassword) {
 		this.userId = requestDto.getUserId();

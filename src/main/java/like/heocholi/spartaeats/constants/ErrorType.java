@@ -46,7 +46,10 @@ public enum ErrorType {
     RECENTLY_USED_PASSWORD(HttpStatus.BAD_REQUEST, "최근 3번 안에 사용한 비밀번호로는 변경할 수 없습니다."),
 
     //store
-    NOT_FOUND_STORES(HttpStatus.NOT_FOUND,"음식점이 존재하지 않습니다.");
+    NOT_FOUND_STORES(HttpStatus.NOT_FOUND,"음식점이 존재하지 않습니다."),
+
+    //pick
+    NOT_FOUND_PICK(HttpStatus.NOT_FOUND,"찜 목록이 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
