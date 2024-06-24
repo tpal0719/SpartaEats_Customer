@@ -8,13 +8,15 @@ import like.heocholi.spartaeats.exception.LikeException;
 import like.heocholi.spartaeats.repository.LikeRepository;
 import like.heocholi.spartaeats.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class LikeService {
     private final LikeRepository likeRepository;
@@ -30,14 +32,14 @@ public class LikeService {
             throw new LikeException(ErrorType.INVALID_LIKE);
         }
 
-        boolean result = toggleLike(customer.getId(), review);
+        boolean result = toggleLike(customer, review);
         review.updateLike(result);
 
         return result;
     }
 
-    private boolean toggleLike(Long customerId, Review review) {
-        Optional<Like> optionalLike = likeRepository.findByCustomerIdAndReviewId(customerId, review.getId());
+    private boolean toggleLike(Customer customer, Review review) {
+        Optional<Like> optionalLike = likeRepository.findByCustomerIdAndReviewId(customer.getId(), review.getId());
         Like like;
 
         if(optionalLike.isPresent()) {
@@ -45,7 +47,7 @@ public class LikeService {
             like.update();
         } else {
             like  = Like.builder()
-                    .customer(review.getCustomer())
+                    .customer(customer)
                     .review(review)
                     .isLike(true)
                     .build();
