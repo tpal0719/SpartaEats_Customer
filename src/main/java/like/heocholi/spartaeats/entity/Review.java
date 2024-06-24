@@ -8,9 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "reviews")
+@NoArgsConstructor
 public class Review extends Timestamped{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +36,19 @@ public class Review extends Timestamped{
 	private String contents;
 	
 	private int likeCount;
+
+
+
+	@Builder
+	public Review(Order order, Store store, Customer customer, String contents) {
+		this.order = order;
+		this.store = store;
+		this.customer = customer;
+		this.contents = contents;
+		likeCount = 0;
+	}
+
+	public void update(String contents){
+		this.contents = contents;
+	}
 }
