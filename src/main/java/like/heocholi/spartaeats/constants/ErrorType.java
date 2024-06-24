@@ -50,9 +50,7 @@ public enum ErrorType {
 
     //like
     INVALID_LIKE(HttpStatus.BAD_REQUEST, "본인이 작성한 리뷰에는 좋아요를 할 수 없습니다."),
-
-    //review
-    NOT_FOUND_REVIEW(HttpStatus.NOT_FOUND, "리뷰를 찾을 수 없습니다.")
+    
       
     //store
     INVALID_TYPE(HttpStatus.BAD_REQUEST, "타입이 올바르지 않습니다."),
