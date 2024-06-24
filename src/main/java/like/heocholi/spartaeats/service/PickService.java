@@ -20,22 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PickService {
 
-    PickRepository pickRepository;
+    private final PickRepository pickRepository;
 
     public PickPageResponseDto getPickList(Customer customer, Integer page) {
         Pageable pageable = PageRequest.of(page-1, 5);
         Page<Pick> pickPage = pickRepository.findAllByCustomerAndIsPickTrue(customer, pageable);
-
         checkValidatePage(page, pickPage);
 
         return new PickPageResponseDto(page, pickPage);
-
-
-
-        // 이런 코드를 찾긴 했습니당...ㅋㅋㅋㅋㅋㅋ
-        // 요거 쓰면  pickRepository.findAllByCustomerAndIsPickTrue(customer, pageable);
-        // 이거를 반환값을 List로 받아야되는 것 같기도.. 한데 잘 모르겠어요 테스트를 안해봐서...
-        //PageImpl<>(pickList).stream().map().toList();
 
     }
 

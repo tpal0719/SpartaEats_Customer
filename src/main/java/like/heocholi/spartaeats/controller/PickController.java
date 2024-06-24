@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/picks")
 public class PickController {
 
-    PickService pickService;
+    private final PickService pickService;
 
     @GetMapping
     public ResponseEntity<ResponseMessage<PickPageResponseDto>> getPickList(
