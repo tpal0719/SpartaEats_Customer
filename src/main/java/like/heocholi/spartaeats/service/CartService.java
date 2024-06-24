@@ -30,13 +30,12 @@ public class CartService {
 	@Transactional
 	public Long addCart(CartRequestDTO cartRequestDTO, Customer customer) {
 		Long menuId = cartRequestDTO.getMenuId();
-		Long storeId = cartRequestDTO.getStoreId();
 		
 		Menu menu = getMenu(menuId);
 		List<Cart> cartList = getCartList(customer);
 		
 		for (Cart cart : cartList) {
-			if (!Objects.equals(storeId, cart.getStore().getId())) {
+			if (!Objects.equals(menu.getStore().getId(), cart.getStore().getId())) {
 				throw new CartException(ErrorType.INVALID_CART);
 			}
 			

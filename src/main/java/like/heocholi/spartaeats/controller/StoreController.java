@@ -1,15 +1,10 @@
 package like.heocholi.spartaeats.controller;
 
-import jakarta.validation.Valid;
 import like.heocholi.spartaeats.dto.*;
-import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.service.StoreService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,13 +18,15 @@ public class StoreController {
     @GetMapping("/{storeId}")
     public ResponseEntity<ResponseMessage<StoreResponseDto>> readStore(@PathVariable Long storeId) {
         StoreResponseDto responseDto = storeService.readStore(storeId);
-        return ResponseEntity.ok().body(
-                ResponseMessage.<StoreResponseDto>builder()
-                        .statusCode(HttpStatus.OK.value())
-                        .message("가게 정보를 성공적으로 불러왔습니다.")
-                        .data(responseDto)
-                        .build()
-        );
+
+        ResponseMessage<StoreResponseDto> responseMessage = ResponseMessage.<StoreResponseDto>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(storeId + "번 가게 상세 정보를 성공적으로 불러왔습니다.")
+                .data(responseDto)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
+
     }
 
     //음식점 리스트 보기
