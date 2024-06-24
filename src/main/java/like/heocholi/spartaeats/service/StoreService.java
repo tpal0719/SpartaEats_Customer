@@ -1,11 +1,15 @@
 package like.heocholi.spartaeats.service;
 
 import like.heocholi.spartaeats.constants.ErrorType;
+import like.heocholi.spartaeats.dto.PickStoreResponseDto;
 import like.heocholi.spartaeats.dto.StorePageResponseDto;
 import like.heocholi.spartaeats.dto.StoreResponseDto;
+import like.heocholi.spartaeats.entity.Customer;
+import like.heocholi.spartaeats.entity.Pick;
 import like.heocholi.spartaeats.entity.Store;
 import like.heocholi.spartaeats.exception.PageException;
 import like.heocholi.spartaeats.exception.StoreException;
+import like.heocholi.spartaeats.repository.PickRepository;
 import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class StoreService {
 
     private final StoreRepository storeRepository;
+    private final PickRepository pickRepository;
 
     // 가게 상세 조회
     public StoreResponseDto readStore(Long storeId) {
@@ -40,6 +45,15 @@ public class StoreService {
 
     }
 
+    // 찜하기 관리
+    @Transactional
+    public PickStoreResponseDto managePicks(Long storeId, Customer customer) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new StoreException(ErrorType.NOT_FOUND_STORE));
+        Pick pick = updatePick(store, customer);
+        return new PickStoreResponseDto(store.getName(), pick.isPick());
+
+    }
+
     // 페이지 유효성 검사
     private static void checkValidatePage(Integer page, Page<Store> storePageList) {
         if (storePageList.getTotalElements() == 0) {
@@ -50,4 +64,23 @@ public class StoreService {
             throw new PageException(ErrorType.INVALID_PAGE);
         }
     }
+
+    public Pick updatePick(Store store, Customer customer) {
+        Pick pick = pickRepository.findByStoreAndCustomer(store, customer);
+
+        if (pick != null) {
+            pick.update();
+        } else{
+            pick = Pick.builder()
+                    .customer(customer)
+                    .store(store)
+                    .isPick(true)
+                    .build();
+
+            pickRepository.save(pick);
+        }
+
+        return pick;
+    }
+
 }

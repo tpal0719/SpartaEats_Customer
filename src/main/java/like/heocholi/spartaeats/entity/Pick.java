@@ -8,10 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 
 @Getter
 @Entity
+@NoArgsConstructor
 @Table(name ="picks")
 public class Pick {
 
@@ -28,4 +32,16 @@ public class Pick {
 	private Store store;
 
 	private boolean isPick;
+
+	@Builder
+	public Pick(Customer customer, Store store, boolean isPick) {
+		this.customer = customer;
+		this.store = store;
+		this.isPick = isPick;
+	}
+
+
+	public void update() {
+		this.isPick = !this.isPick;
+	}
 }
