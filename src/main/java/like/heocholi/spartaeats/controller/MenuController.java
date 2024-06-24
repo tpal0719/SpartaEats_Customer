@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class MenuController {
-
     private final MenuService menuService;
 
     //메뉴 단건 조회

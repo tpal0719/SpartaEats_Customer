@@ -1,12 +1,23 @@
 package like.heocholi.spartaeats.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "reviews")
 @Getter
-public class Review extends Timestamped {
+@Table(name = "reviews")
+@NoArgsConstructor
+public class Review extends Timestamped{
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -34,5 +45,18 @@ public class Review extends Timestamped {
 	// 새로운 setLike 메서드 추가
 	public void setLike(int likeCount) {
 		this.likeCount = likeCount;
+	}
+
+	@Builder
+	public Review(Order order, Store store, Customer customer, String contents) {
+		this.order = order;
+		this.store = store;
+		this.customer = customer;
+		this.contents = contents;
+		likeCount = 0;
+	}
+
+	public void update(String contents){
+		this.contents = contents;
 	}
 }

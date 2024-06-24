@@ -17,7 +17,6 @@ import like.heocholi.spartaeats.entity.Customer;
 import like.heocholi.spartaeats.entity.Order;
 import like.heocholi.spartaeats.entity.OrderMenu;
 import like.heocholi.spartaeats.entity.Store;
-import like.heocholi.spartaeats.exception.ContentNotFoundException;
 import like.heocholi.spartaeats.exception.OrderException;
 import like.heocholi.spartaeats.exception.PageException;
 import like.heocholi.spartaeats.repository.OrderMenuRepository;
@@ -40,7 +39,7 @@ public class OrderService {
 		List<Cart> cartList = cartService.getCartList(customer);
 		
 		if (cartList.isEmpty()) {
-			throw new ContentNotFoundException("장바구니에 담긴 메뉴가 없습니다.");
+			throw new OrderException(ErrorType.NOT_FOUND_CART);
 		}
 		
 		Store store = cartList.get(0).getStore();
