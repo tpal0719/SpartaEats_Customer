@@ -22,8 +22,8 @@
 음식 주문 프로그램 `Sparta Eats` 의 일반 사용자 API
 
 ### API 명세
-- [POSTMAN으로 보기](https://documenter.getpostman.com/view/28179041/2sA3XLGQpF#6aff792c-9c6a-4696-9aa8-071ac5bf6186)</br>
-- [노션으로 보기](https://www.notion.so/teamsparta/1e8ad6bc25ec48b1abf1de6b1429fbaa?v=e721883631df49fa93085dd86d7b7cc9)
+- [POSTMAN으로 보기](https://documenter.getpostman.com/view/28179041/2sA3XY5Haj)</br>
+
 </br>
 
 ## 🍗 Sparta Eats 에서는...
