@@ -33,4 +33,7 @@ public class Store extends Timestamped{
 
 	@OneToMany(mappedBy = "store")
 	private List<Pick> pickList;
+
+	@OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST)
+	private List<Review> reviews;
 }
