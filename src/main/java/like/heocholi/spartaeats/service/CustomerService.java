@@ -12,6 +12,8 @@ import like.heocholi.spartaeats.exception.PasswordException;
 import like.heocholi.spartaeats.exception.CustomerException;
 import like.heocholi.spartaeats.repository.CustomerRepository;
 import like.heocholi.spartaeats.repository.PasswordHistoryRepository;
+import like.heocholi.spartaeats.repository.ReviewRepository;
+import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,9 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final PasswordHistoryRepository passwordHistoryRepository;
     private final PasswordEncoder passwordEncoder;
+
+    private final StoreRepository storeRepository;
+    private final ReviewRepository reviewRepository;
 
     //회원가입 메서드
     // requestDto 회원가입 요청 DTO (SignupRequestDto)
@@ -83,7 +88,10 @@ public class CustomerService {
 
     //유저 정보 조회
     public CustomerResponseDTO getCustomerInfo(Customer customer) {
-        return new CustomerResponseDTO(customer);
+        Long storePickCount = storeRepository.getPickCountByCustomer(customer.getId());
+        Long reviewLikeCount = reviewRepository.getLikeCountByCustomer(customer.getId());
+
+        return new CustomerResponseDTO(customer,storePickCount,reviewLikeCount);
     }
 
 
