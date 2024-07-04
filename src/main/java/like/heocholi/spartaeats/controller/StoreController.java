@@ -37,7 +37,7 @@ public class StoreController {
 
 
     // 찜한 음식점만 조회 (최신순, 5개씩)
-    @GetMapping("/pickstore")
+    @GetMapping("/pickstore/order/date")
     public Page<StoreResponseDto> getStoresUserLikedWithPage(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam(defaultValue = "1") int page,
@@ -45,6 +45,13 @@ public class StoreController {
         return storeService.getStoreCustomerPickWithPage(userDetails.getCustomer().getId(), page-1, size);
     }
 
+    @GetMapping("/pickstore/order/managerid")
+    public Page<StoreResponseDto> getStoreCustomerPickWithPageOrderByManagerId(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return storeService.getStoreCustomerPickWithPageOrderByManagerId(userDetails.getCustomer().getId(), page - 1, size);
+    }
     //음식점 리스트 보기
     //주문이 많은 순서대로
     @GetMapping

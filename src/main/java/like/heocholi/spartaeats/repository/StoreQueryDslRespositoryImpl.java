@@ -17,14 +17,29 @@ public class StoreQueryDslRespositoryImpl implements StoreQueryDslRepository{
         QStore qStore = QStore.store;
         QPick qPick = QPick.pick;
 
-        List<Store> reviews = jpaQueryFactory.selectFrom(qStore)
+        List<Store> storeList = jpaQueryFactory.selectFrom(qStore)
                 .leftJoin(qPick).on(qStore.id.eq(qPick.store.id))
                 .orderBy(qStore.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return reviews;
+        return storeList;
+    }
+
+    @Override
+    public List<Store> getStoreCustomerPickWithPageOrderByManagerId(Long userId, Pageable pageable) {
+        QStore qStore = QStore.store;
+        QPick qPick = QPick.pick;
+
+        List<Store> storeList = jpaQueryFactory.selectFrom(qStore)
+                .leftJoin(qPick).on(qStore.id.eq(qPick.store.id))
+                .orderBy(qStore.manager.userId.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return storeList;
     }
 
     @Override

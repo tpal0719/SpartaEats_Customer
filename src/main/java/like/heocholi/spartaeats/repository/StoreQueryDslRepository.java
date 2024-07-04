@@ -8,6 +8,7 @@ import java.util.List;
 public interface StoreQueryDslRepository {
 
     List<Store> getStoreCustomerPickWithPage(Long userId, Pageable pageable);
+    List<Store> getStoreCustomerPickWithPageOrderByManagerId(Long userId, Pageable pageable);
 
     Long getPickCountByCustomer(Long userId);
 }
