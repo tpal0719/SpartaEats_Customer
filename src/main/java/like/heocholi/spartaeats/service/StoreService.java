@@ -15,10 +15,13 @@ import like.heocholi.spartaeats.repository.PickRepository;
 import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -47,6 +50,18 @@ public class StoreService {
 
         return new StorePageResponseDto(page, storePageList);
     }
+
+    // 찜한 가게 조회
+    public Page<StoreResponseDto> getStoreCustomerPickWithPage(Long customerId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Store> stores = storeRepository.getStoreCustomerPickWithPage(customerId, pageable);
+        List<StoreResponseDto> storeResponseDtoList = stores.stream().map(StoreResponseDto::new).toList();
+
+        Long count = getPickCountByCustomer(customerId);
+
+        return new PageImpl<>(storeResponseDtoList,pageable,count);
+    }
+
 
     private RestaurantType checkValidateType(String type) {
         RestaurantType restaurantType;
@@ -95,6 +110,18 @@ public class StoreService {
         }
 
         return pick;
+    }
+
+
+
+
+
+
+    /* Utils */
+
+    // 찜한 가게 갯수
+    public Long getPickCountByCustomer(Long userId) {
+        return storeRepository.getPickCountByCustomer(userId);
     }
 
 }

@@ -5,10 +5,14 @@ import like.heocholi.spartaeats.dto.*;
 import like.heocholi.spartaeats.security.UserDetailsImpl;
 import like.heocholi.spartaeats.service.StoreService;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,6 +33,16 @@ public class StoreController {
 
         return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
 
+    }
+
+
+    // 찜한 음식점만 조회 (최신순, 5개씩)
+    @GetMapping("/pickstore")
+    public Page<StoreResponseDto> getStoresUserLikedWithPage(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size){
+        return storeService.getStoreCustomerPickWithPage(userDetails.getCustomer().getId(), page-1, size);
     }
 
     //음식점 리스트 보기
