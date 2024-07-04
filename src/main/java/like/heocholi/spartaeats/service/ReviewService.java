@@ -14,6 +14,10 @@ import like.heocholi.spartaeats.repository.ReviewRepository;
 import like.heocholi.spartaeats.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,10 +100,30 @@ public class ReviewService {
         return review.getId();
     }
 
+    // Customer 가 좋아요한 Review만 조회
+    public Page<ReviewResponseDto> getReviewCustomerLikeWithPage(Long customerId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<Review> reviews = reviewRepository.getReviewCustomerLikeWithPage(customerId, pageable);
+        List<ReviewResponseDto> reviewResponseDtoList = reviews.stream().map(ReviewResponseDto::new).toList();
+
+        Long count = getLikeCountByCustomer(customerId);
+
+        return new PageImpl<ReviewResponseDto>(reviewResponseDtoList, pageable, count);
+    }
+
+
+
+
+
 
 
 
     /* Util */
+
+    // Customer 가 좋아요 한 갯수
+    public Long getLikeCountByCustomer(Long customerId) {
+        return reviewRepository.getLikeCountByCustomer(customerId);
+    }
 
     public Review findReviewByIdAndCustomercheck(Long reviewId, Customer customer) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(
