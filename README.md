@@ -10,6 +10,6 @@
 - 찜한 음식점 목록(음식점주 아이디 기준/5개)
   https://documenter.getpostman.com/view/19185435/2sA3dyiWSL#9d524e3b-35ab-4699-8943-778ec86335c9
 
--프로필 조회시 내가 좋아요한 리뷰 수
--프로필 조회시 내가 찜한 음식점 수
-https://documenter.getpostman.com/view/19185435/2sA3dyiWSL#004966e2-488c-4d9b-aefe-545ddce9d820
+-프로필 조회시 내가 좋아요한 리뷰 수/프로필 조회시 내가 찜한 음식점 수
+  https://documenter.getpostman.com/view/19185435/2sA3dyiWSL#004966e2-488c-4d9b-aefe-545ddce9d820
+
