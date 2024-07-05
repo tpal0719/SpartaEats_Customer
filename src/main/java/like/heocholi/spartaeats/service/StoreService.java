@@ -65,7 +65,7 @@ public class StoreService {
     // 찜한 가게 조회(음식점 점주 아이디순)
     public Page<StoreResponseDto> getStoreCustomerPickWithPageOrderByManagerId(Long customerId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        List<Store> stores = storeRepository.getStoreCustomerPickWithPage(customerId, pageable);
+        List<Store> stores = storeRepository.getStoreCustomerPickWithPageOrderByManagerId(customerId, pageable);
         List<StoreResponseDto> storeResponseDtoList = stores.stream().map(StoreResponseDto::new).toList();
 
         Long count = getPickCountByCustomer(customerId);

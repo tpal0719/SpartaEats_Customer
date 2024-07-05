@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class ReviewQueryDslRepositoryImpl implements ReviewQueryDslRepository{
+public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -19,8 +19,10 @@ public class ReviewQueryDslRepositoryImpl implements ReviewQueryDslRepository{
         QReview qReview = QReview.review;
         QLike qLike = QLike.like;
 
-        List<Review> reviews = jpaQueryFactory.selectFrom(qReview)
+        List<Review>  reviews = jpaQueryFactory.select(qReview)
+                .from(qReview)
                 .leftJoin(qLike).on(qReview.id.eq(qLike.review.id))
+                .where(qLike.customer.id.eq(customerId).and(qLike.isLike.isTrue()))
                 .orderBy(qReview.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -34,7 +36,8 @@ public class ReviewQueryDslRepositoryImpl implements ReviewQueryDslRepository{
         QReview qReview = QReview.review;
         QLike qLike = QLike.like;
 
-        Long count = jpaQueryFactory.select(qLike.count())
+        Long count = jpaQueryFactory
+                .select(qLike.count())
                 .from(qReview)
                 .leftJoin(qLike).on(qReview.id.eq(qLike.review.id))
                 .where(qLike.customer.id.eq(customerId).and(qLike.isLike.isTrue()))

@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface StoreQueryDslRepository {
+public interface StoreRepositoryCustom {
 
     List<Store> getStoreCustomerPickWithPage(Long userId, Pageable pageable);
     List<Store> getStoreCustomerPickWithPageOrderByManagerId(Long userId, Pageable pageable);
